@@ -1,0 +1,35 @@
+/* GEP Editor v9.23.0 · Aviso de edición simultánea */
+.gep-lock-banner{display:flex;align-items:flex-start;gap:12px;margin:0 0 16px;padding:12px 16px;border-radius:10px;border:1px solid #c9dccf;background:#eef6f0;color:#173c2a;font-size:14px;line-height:1.45}
+.gep-lock-banner[hidden]{display:none}
+.gep-lock-banner>.dashicons{flex:none;margin-top:1px;color:#1f7a4d}
+.gep-lock-banner>div{flex:1;min-width:0;display:grid;gap:2px}
+.gep-lock-banner strong{font-weight:700}
+.gep-lock-banner.is-changed{background:#fff5e5;border-color:#f0cf96;color:#5a3a00}
+.gep-lock-banner.is-changed>.dashicons{color:#b26b00}
+.gep-lock-banner .button{flex:none;align-self:center}
+.gep-lock-modal{position:fixed;inset:0;z-index:100100;display:grid;place-items:center;padding:16px;background:rgba(7,25,17,.55)}
+.gep-lock-modal-box{width:min(520px,100%);background:#fff;color:#14231d;border-radius:14px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.gep-lock-modal-box h2{margin:0 0 10px;font-size:19px;line-height:1.3;color:#0d2c1c}
+.gep-lock-modal-box p{margin:0 0 10px;font-size:14px;line-height:1.5}
+.gep-lock-modal-note{color:#5b6b63}
+.gep-lock-modal-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:16px}
+body.gep-theme-dark .gep-lock-banner{background:#16201c;border-color:#2c3a34;color:#e7efea}
+body.gep-theme-dark .gep-lock-banner>.dashicons{color:#3fae79}
+body.gep-theme-dark .gep-lock-banner.is-changed{background:#2e2414;border-color:#6b4f1f;color:#f3e3c4}
+body.gep-theme-dark .gep-lock-banner.is-changed>.dashicons{color:#e3a74a}
+body.gep-theme-dark .gep-lock-modal-box{background:#16201c;color:#e7efea}
+body.gep-theme-dark .gep-lock-modal-box h2{color:#e7efea}
+body.gep-theme-dark .gep-lock-modal-note{color:#9aaca2}
+.gep-lock-banner .button,.gep-lock-modal .button{min-height:36px;padding:0 14px;border-radius:9px!important;border:1px solid #cfdcd3!important;background:#fff!important;color:#173c2a!important;font-weight:600;box-shadow:none!important}
+.gep-lock-banner .button:hover,.gep-lock-modal .button:hover{border-color:#1f7a4d!important;color:#0d2c1c!important}
+.gep-lock-modal .button.button-primary{background:var(--gep-green,#1f5a3b)!important;border-color:var(--gep-green,#1f5a3b)!important;color:#fff!important}
+.gep-lock-modal .button.button-primary:hover{background:var(--gep-green-2,#174a30)!important}
+.gep-lock-banner .button:focus-visible,.gep-lock-modal .button:focus-visible{outline:2px solid #3fae79;outline-offset:2px}
+body.gep-theme-dark .gep-lock-banner .button,body.gep-theme-dark .gep-lock-modal .button{background:#1d2a25!important;border-color:#2c3a34!important;color:#e7efea!important}
+body.gep-theme-dark .gep-lock-modal .button.button-primary{background:#2a9a6a!important;border-color:#2a9a6a!important;color:#06241a!important}
+
+/* v10.0.0 · Guardado seguro: mismo estilo que la ventana de edición simultánea. */
+.gep-save-problem .gep-lock-modal-box h2{display:flex;align-items:center;gap:8px}
+.gep-save-problem .gep-lock-modal-box h2 .dashicons{color:#b26b00;font-size:22px;width:22px;height:22px}
+body.gep-theme-dark .gep-save-problem .gep-lock-modal-box h2 .dashicons{color:#e3a74a}
+.gep-lock-modal a.button{display:inline-flex;align-items:center;text-decoration:none}

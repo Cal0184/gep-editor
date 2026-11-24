@@ -1,0 +1,1226 @@
+/* ========================================================================== 
+   GEP Editor Beta · Interfaz visual MapBiomas/GEP
+   Sólo modifica la presentación del administrador. La lógica se conserva.
+   ========================================================================== */
+
+:root{
+  --gep-shell:#f4f7f5;
+  --gep-sidebar:#073b31;
+  --gep-sidebar-2:#0b4b3d;
+  --gep-sidebar-hover:rgba(255,255,255,.075);
+  --gep-sidebar-active:rgba(136,209,168,.20);
+  --gep-accent:#08764f;
+  --gep-accent-2:#0c8c5e;
+  --gep-ink:#101b17;
+  --gep-muted-913:#68766e;
+  --gep-line:#dfe7e2;
+  --gep-card:#ffffff;
+  --gep-soft-913:#f8faf9;
+  --gep-success-bg:#e7f5ec;
+  --gep-success:#176640;
+  --gep-warn-bg:#fff3dd;
+  --gep-warn:#9a6510;
+  --gep-radius:14px;
+  --gep-sidebar-w:212px;
+  --gep-topbar-h:60px;
+  --gep-shadow-913:0 10px 28px rgba(19,48,32,.045);
+}
+
+/* WordPress chrome -> full GEP workspace */
+body.toplevel_page_gep-content-editor{background:var(--gep-shell)!important;color:var(--gep-ink)}
+body.toplevel_page_gep-content-editor #adminmenumain,
+body.toplevel_page_gep-content-editor #wpadminbar,
+body.toplevel_page_gep-content-editor #wpfooter,
+body.toplevel_page_gep-content-editor .update-nag{display:none!important}
+html.wp-toolbar body.toplevel_page_gep-content-editor{padding-top:0!important}
+body.toplevel_page_gep-content-editor #wpcontent{margin-left:0!important;padding-left:0!important}
+body.toplevel_page_gep-content-editor #wpbody{padding-top:0!important}
+body.toplevel_page_gep-content-editor #wpbody-content{padding-bottom:0!important;min-height:100vh}
+body.toplevel_page_gep-content-editor .notice:not(.inline){margin-left:0}
+
+.gep-editor-wrap{
+  max-width:none!important;
+  min-height:100vh;
+  margin:0!important;
+  padding:calc(var(--gep-topbar-h) + 26px) 28px 44px calc(var(--gep-sidebar-w) + 30px)!important;
+  background:
+    radial-gradient(circle at 82% 10%,rgba(41,135,87,.035),transparent 28%),
+    var(--gep-shell);
+  color:var(--gep-ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.gep-editor-wrap *{box-sizing:border-box}
+.gep-editor-wrap a:focus,.gep-editor-wrap button:focus,.gep-editor-wrap input:focus,.gep-editor-wrap textarea:focus,.gep-editor-wrap select:focus{outline:none}
+
+/* --------------------------------------------------------------------------
+   Sidebar
+   -------------------------------------------------------------------------- */
+.gep-app-header{
+  position:fixed!important;
+  z-index:10030;
+  inset:0 auto auto 0;
+  width:var(--gep-sidebar-w);
+  height:118px;
+  margin:0!important;
+  padding:22px 18px 14px!important;
+  display:block!important;
+  background:linear-gradient(180deg,#073d33 0%,#07382f 100%);
+  border:0!important;
+  box-shadow:none!important;
+}
+.gep-app-header:after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:-1px;height:1px;
+  background:rgba(255,255,255,.075)
+}
+.gep-brand{display:flex!important;align-items:center!important;gap:10px!important;color:#fff}
+.gep-brand-mark{
+  width:48px!important;height:48px!important;flex:0 0 48px!important;
+  border:0!important;border-radius:0!important;background:transparent!important;padding:0!important;
+  display:grid!important;place-items:center!important
+}
+.gep-brand-mark img{display:block!important;width:45px!important;height:45px!important;object-fit:contain!important;filter:drop-shadow(0 2px 3px rgba(0,0,0,.12))}
+.gep-brand-copy{display:flex;min-width:0;flex-direction:column;line-height:1}
+.gep-brand-mapbiomas{font-size:10px;font-weight:600;letter-spacing:.035em;color:#c8dfd5;margin-bottom:4px}
+.gep-brand-copy strong{font-size:25px;font-weight:800;letter-spacing:-.035em;color:#fff;line-height:.92}
+.gep-brand-copy small{font-size:12px;color:#b8d4c9;margin-top:6px}
+.gep-app-header>.gep-save-status{display:none!important}
+
+.gep-page-tabs{
+  position:fixed!important;
+  z-index:10025;
+  left:0!important;top:118px!important;bottom:0!important;
+  width:var(--gep-sidebar-w)!important;
+  height:auto!important;
+  margin:0!important;
+  padding:10px 12px 118px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:3px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  background:
+    radial-gradient(ellipse at 65% 100%,rgba(39,122,86,.21),transparent 42%),
+    linear-gradient(180deg,#07382f 0%,#06352d 100%)!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important
+}
+.gep-page-tabs:after{
+  content:"";pointer-events:none;position:absolute;left:-45px;right:-35px;bottom:-6px;height:180px;opacity:.16;
+  background:
+    repeating-radial-gradient(ellipse at 35% 110%,transparent 0 13px,rgba(120,214,160,.55) 14px 15px,transparent 16px 25px);
+  transform:rotate(-4deg)
+}
+.gep-page-tab{
+  position:relative!important;z-index:2!important;
+  width:100%!important;min-height:48px!important;height:48px!important;
+  flex:0 0 48px!important;
+  justify-content:flex-start!important;
+  gap:11px!important;padding:0 13px!important;
+  border:0!important;border-radius:9px!important;background:transparent!important;
+  color:#d1e3dc!important;font-size:13px!important;font-weight:500!important;text-decoration:none!important;
+  transition:background .15s ease,color .15s ease,transform .15s ease!important
+}
+.gep-page-tab .dashicons{font-size:20px!important;width:20px!important;height:20px!important;line-height:20px!important;color:#d7e7e1!important}
+.gep-page-tab:hover{background:var(--gep-sidebar-hover)!important;color:#fff!important;transform:translateX(1px)}
+.gep-page-tab.is-active{background:var(--gep-sidebar-active)!important;color:#fff!important;font-weight:750!important}
+.gep-page-tab.is-active .dashicons{color:#fff!important}
+.gep-page-tab.is-active:after{display:none!important}
+.gep-page-tab.is-disabled{opacity:.35!important}
+.gep-sidebar-public{
+  position:absolute;z-index:3;left:12px;right:12px;bottom:16px;
+  min-height:70px;padding:13px 13px;border:1px solid rgba(255,255,255,.12);border-radius:10px;
+  background:rgba(255,255,255,.065);color:#e6f1ec!important;text-decoration:none!important;
+  display:flex;align-items:flex-start;gap:10px;backdrop-filter:blur(5px)
+}
+.gep-sidebar-public>.dashicons{margin-top:1px;font-size:17px;width:17px;height:17px;line-height:17px;color:#b9dfca}
+.gep-sidebar-public>span:last-child{display:flex;flex-direction:column;gap:4px;min-width:0}
+.gep-sidebar-public strong{font-size:11px;color:#fff}
+.gep-sidebar-public small{font-size:9px;color:#a9c9bc;line-height:1.35}
+.gep-sidebar-public:hover{background:rgba(255,255,255,.10)}
+
+/* --------------------------------------------------------------------------
+   Top utility bar / page header
+   -------------------------------------------------------------------------- */
+.gep-top-utility{
+  position:fixed;z-index:10020;top:0;left:var(--gep-sidebar-w);right:0;height:var(--gep-topbar-h);
+  display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:0 28px;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid #e4e9e6;
+  box-shadow:0 1px 0 rgba(18,43,29,.015)
+}
+.gep-top-help{display:inline-flex;align-items:center;gap:6px;padding:7px 8px;color:#536159!important;text-decoration:none!important;font-size:12px;font-weight:600;border-radius:7px}
+.gep-top-help:hover{background:#f1f6f3;color:#1d5f3e!important}
+.gep-top-help .dashicons{font-size:17px!important;width:17px!important;height:17px!important;line-height:17px!important}
+.gep-top-divider{width:1px;height:27px;background:#e2e7e4;margin:0 5px}
+.gep-user-badge{width:35px;height:35px;border-radius:50%;background:linear-gradient(145deg,#155f42,#0b4636);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800;letter-spacing:.02em}
+.gep-user-name{font-size:12px;color:#26342d;font-weight:650;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gep-user-chevron{font-size:15px!important;width:15px!important;height:15px!important;line-height:15px!important;color:#647269}
+
+.gep-page-heading{margin:0 auto 20px;max-width:1540px}
+.gep-breadcrumb{display:flex;align-items:center;gap:7px;margin:0 0 17px;color:#397257;font-size:11px}
+.gep-breadcrumb .dashicons{font-size:16px!important;width:16px!important;height:16px!important;line-height:16px!important;color:#1f7250}
+.gep-breadcrumb i{font-style:normal;color:#99a39d;font-size:14px}
+.gep-breadcrumb strong{font-weight:650;color:#46705b}
+.gep-title-row{margin:0!important;align-items:flex-start!important}
+.gep-title-row h2{font-size:28px!important;line-height:1.08!important;letter-spacing:-.035em!important;color:#111c17!important;font-weight:760!important}
+.gep-title-row p{margin:7px 0 0!important;color:#6e7c74!important;font-size:13px!important;line-height:1.45!important}
+.gep-kicker{display:none!important}
+
+/* --------------------------------------------------------------------------
+   Status / actions strip
+   -------------------------------------------------------------------------- */
+.gep-contact-commandbar{
+  position:relative!important;top:auto!important;z-index:15!important;
+  max-width:1540px;margin:0 auto 22px!important;padding:13px 16px!important;
+  min-height:84px!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:16px!important;
+  border:1px solid var(--gep-line)!important;border-radius:14px!important;background:#fff!important;
+  box-shadow:var(--gep-shadow-913)!important;backdrop-filter:none!important
+}
+.gep-contact-commandbar-copy{display:flex!important;align-items:center!important;gap:12px!important;flex:1 1 auto!important;min-width:0!important;flex-wrap:nowrap!important}
+.gep-contact-command-icon{width:54px!important;height:54px!important;flex:0 0 54px!important;border-radius:13px!important;background:linear-gradient(145deg,#129465,#05744e)!important;color:#fff!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.gep-contact-command-icon .dashicons{font-size:26px!important;width:26px!important;height:26px!important;line-height:26px!important}
+.gep-contact-commandbar-copy>div{display:flex!important;flex-direction:column!important;gap:3px!important;min-width:160px!important}
+.gep-contact-commandbar-copy strong{font-size:14px!important;color:#17231c!important;font-weight:750!important}
+.gep-contact-commandbar-copy small{font-size:10px!important;color:#77837c!important;line-height:1.35!important}
+.gep-inline-save-state{
+  margin-left:auto!important;min-width:205px!important;min-height:54px!important;padding:10px 14px!important;border:0!important;border-radius:12px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;
+  background:linear-gradient(90deg,#e8f6ed,#eaf5ee)!important;color:#176640!important;font-size:12px!important;font-weight:800!important
+}
+.gep-inline-save-state:after{content:"Todos los bloques están configurados.";display:block;margin-left:2px;color:#708177;font-size:8.5px;font-weight:500;white-space:nowrap}
+.gep-inline-save-state.is-dirty{background:#fff4df!important;color:#8a5e11!important}
+.gep-inline-save-state.is-dirty:after{content:"Hay cambios pendientes de guardar.";color:#91744a}
+.gep-inline-save-state.is-error{background:#fff0ee!important;color:#9d332b!important}
+.gep-inline-save-state.is-error:after{content:"Revisa los campos marcados.";color:#8a5e59}
+.gep-inline-save-state .dashicons{font-size:18px!important;width:18px!important;height:18px!important;line-height:18px!important}
+.gep-contact-commandbar-actions{display:flex!important;align-items:center!important;gap:9px!important;flex:0 0 auto!important;flex-wrap:nowrap!important}
+.gep-contact-commandbar .button{height:44px!important;min-height:44px!important;padding:0 15px!important;border-radius:8px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;font-size:11px!important;font-weight:700!important;box-shadow:none!important}
+.gep-contact-commandbar-actions .button:not(.button-primary){background:#fff!important;border:1px solid #a9c0b3!important;color:#245f42!important}
+.gep-contact-commandbar-actions .button:not(.button-primary):hover{background:#f2f8f4!important;border-color:#6f9c82!important;color:#174f35!important;transform:none!important}
+.gep-contact-commandbar-actions .button-primary{min-width:146px!important;background:linear-gradient(180deg,#087a52,#056b47)!important;border-color:#056b47!important;color:#fff!important}
+.gep-contact-commandbar-actions .button-primary:hover{background:linear-gradient(180deg,#086e4a,#055f40)!important;border-color:#055f40!important;transform:none!important}
+.gep-contact-commandbar-actions .button-primary:disabled,.gep-contact-commandbar-actions .button-primary.disabled{background:#eef0ef!important;border-color:#eef0ef!important;color:#b9c0bc!important;opacity:1!important}
+
+/* --------------------------------------------------------------------------
+   Main editor grid / cards
+   -------------------------------------------------------------------------- */
+.gep-editor-layout,
+.gep-editor-layout-contact,
+.gep-editor-layout-directory,
+.gep-editor-layout-docencia,
+.gep-editor-layout-projects,
+.gep-editor-layout-publications,
+.gep-editor-layout-home{
+  max-width:1540px!important;margin:0 auto!important;
+  display:grid!important;grid-template-columns:minmax(0,1.12fr) minmax(420px,.78fr)!important;gap:22px!important;align-items:start!important
+}
+.gep-questionnaire{gap:12px!important;min-width:0!important}
+.gep-step-card,.gep-preview-card,.gep-empty-state,.gep-structure-manager{border-color:var(--gep-line)!important;box-shadow:var(--gep-shadow-913)!important}
+.gep-parent-preview-card{border-radius:14px!important;background:#fff!important;padding:13px!important}
+.gep-preview-column{top:76px!important}
+
+/* Preview heading */
+.gep-parent-preview-card>.gep-preview-heading{min-height:42px!important;margin:0 0 10px!important;padding:0 1px!important;align-items:center!important}
+.gep-preview-icon{width:36px!important;height:36px!important;flex:0 0 36px!important;background:#e8f5ed!important;color:#14704b!important}
+.gep-preview-heading-title-row h3{font-size:12px!important;font-weight:760!important;color:#1f3027!important}
+.gep-preview-zone-badge{background:#edf6ff!important;border:1px solid #bfdbf4!important;color:#176496!important;border-radius:999px!important;font-size:8.5px!important;font-weight:800!important;padding:4px 7px!important}
+.gep-preview-mode-switcher,.gep-preview-device-switcher,.gep-preview-devicebar{background:#f4f7f5!important;border-color:#dae3dd!important;border-radius:9px!important}
+.gep-preview-mode-button,.gep-directory-device-button,.gep-device-button,.gep-docencia-device-button,.gep-project-device-button,.gep-publication-device-button,.gep-home-device-button{min-height:31px!important;border-radius:7px!important;font-size:9.5px!important}
+.gep-preview-mode-button.is-active,.gep-directory-device-button.is-active,.gep-device-button.is-active,.gep-docencia-device-button.is-active,.gep-project-device-button.is-active,.gep-publication-device-button.is-active,.gep-home-device-button.is-active{background:#fff!important;color:#126b49!important;border-color:#bcd2c5!important;box-shadow:0 2px 7px rgba(23,75,48,.06)!important}
+.gep-directory-device-stage,.gep-contact-device-stage,.gep-docencia-device-stage,.gep-project-device-stage,.gep-publication-device-stage,.gep-home-device-stage,.gep-hub-device-stage{border-radius:10px!important;background:#eef2ef!important;border:1px solid #e5ebe7!important}
+
+/* Inputs and inline editor */
+.gep-admin-field input[type=text],.gep-admin-field input[type=email],.gep-admin-field input[type=url],.gep-admin-field textarea,.gep-section-builder input[type=text],.gep-section-builder input[type=email],.gep-section-builder textarea,.gep-item-row input[type=text],.gep-item-row input[type=email],.gep-item-row textarea,
+.gep-custom-field input,.gep-custom-field textarea,.gep-custom-field select,.gep-custom-image-actions input{
+  border-color:#d6dfd9!important;border-radius:8px!important;background:#fff!important;box-shadow:none!important
+}
+.gep-admin-field input:focus,.gep-admin-field textarea:focus,.gep-section-builder input:focus,.gep-section-builder textarea:focus,.gep-item-row input:focus,.gep-item-row textarea:focus,.gep-custom-field input:focus,.gep-custom-field textarea:focus,.gep-custom-field select:focus{border-color:#69a284!important;box-shadow:0 0 0 3px rgba(35,129,81,.08)!important}
+
+/* --------------------------------------------------------------------------
+   Structure manager - target visual from the new design
+   -------------------------------------------------------------------------- */
+.gep-structure-manager{margin:0!important;border-radius:14px!important;background:transparent!important;overflow:visible!important;box-shadow:none!important;border:0!important}
+.gep-structure-head{
+  min-height:62px!important;padding:4px 2px 13px!important;border:0!important;background:transparent!important;align-items:flex-end!important
+}
+.gep-structure-head>div{min-width:0}
+.gep-structure-kicker{display:none!important}
+.gep-structure-head h3{margin:0!important;font-size:17px!important;line-height:1.2!important;color:#18241e!important;font-weight:760!important;letter-spacing:-.015em!important}
+.gep-structure-subtitle{margin:4px 0 0!important;font-size:10.5px!important;line-height:1.35!important;color:#728078!important}
+.gep-structure-add.button{
+  min-height:42px!important;padding:0 15px!important;border:1px solid #277b55!important;border-radius:8px!important;background:#fff!important;color:#176640!important;font-size:11px!important;font-weight:760!important
+}
+.gep-structure-add.button:hover,.gep-structure-add.button:focus{background:#edf7f1!important;border-color:#176640!important;color:#125536!important}
+.gep-structure-add .dashicons{font-size:19px!important;width:19px!important;height:19px!important;line-height:19px!important}
+.gep-structure-list{padding:0!important;display:grid!important;gap:10px!important}
+.gep-structure-row{margin:0!important;border:1px solid #dfe7e2!important;border-radius:12px!important;background:#fff!important;box-shadow:0 3px 12px rgba(24,55,38,.02)!important;transition:border-color .15s ease,box-shadow .15s ease!important}
+.gep-structure-row:hover{border-color:#bfd2c6!important;background:#fff!important;box-shadow:0 7px 20px rgba(24,55,38,.05)!important}
+.gep-structure-row.is-open{border-color:#a8c8b5!important;box-shadow:0 8px 24px rgba(24,78,48,.055)!important;background:#fff!important}
+.gep-structure-row.is-disabled{opacity:.67!important;background:#f7f8f7!important}
+.gep-structure-summary{
+  min-height:67px!important;padding:10px 13px!important;
+  grid-template-columns:25px 38px 28px minmax(0,1fr) auto 24px!important;gap:8px!important
+}
+.gep-structure-grip{color:#7d8d84!important}
+.gep-structure-number{width:34px!important;height:34px!important;background:linear-gradient(145deg,#14724c,#0c5b3d)!important;font-size:11px!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.gep-structure-type-icon{width:28px!important;height:28px!important;border-radius:7px!important;background:#edf5ef!important;color:#14704b!important}
+.gep-structure-copy strong{font-size:12px!important;line-height:1.25!important;color:#18291f!important;font-weight:680!important}
+.gep-structure-copy small{margin-top:3px!important;font-size:8.5px!important;color:#7a867f!important}
+.gep-structure-status{padding:5px 10px!important;background:var(--gep-success-bg)!important;color:var(--gep-success)!important;font-size:8.5px!important;border-radius:999px!important}
+.gep-structure-status.is-incomplete{background:var(--gep-warn-bg)!important;color:var(--gep-warn)!important}
+.gep-structure-status.is-hidden-status{background:#eef0ef!important;color:#67736d!important}
+.gep-structure-chevron{color:#456454!important}
+.gep-structure-row-panel{border-top:1px solid #e7ece9!important;background:#fbfcfb!important}
+.gep-structure-overview{grid-template-columns:135px minmax(0,1fr)!important;gap:14px!important;padding:14px 15px 15px!important}
+.gep-structure-card-visual{height:152px!important;border-color:#dce5df!important;border-radius:9px!important;background:#eef3ef!important}
+.gep-structure-overview-type{font-size:8px!important;color:#347652!important}
+.gep-structure-overview-top strong{font-size:12px!important;color:#163927!important}
+.gep-structure-overview-top .gep-structure-edit{min-height:34px!important;padding:4px 11px!important;border-radius:7px!important;border-color:#abc9b7!important;color:#176640!important;background:#fff!important;font-size:9px!important}
+.gep-structure-summary-line{min-height:30px!important;border-color:#e5ebe7!important;border-radius:7px!important;padding:6px 8px!important;background:#fff!important}
+.gep-structure-summary-line b,.gep-structure-summary-line em{font-size:8.7px!important}
+.gep-structure-overview-foot{margin-top:10px!important}
+.gep-structure-actions .button{border-radius:6px!important}
+.gep-structure-inline-editor{margin:0 14px 15px!important;border-color:#dbe5df!important;border-radius:10px!important;box-shadow:none!important}
+.gep-inline-editor-head{padding:11px 13px!important;background:#f5f9f6!important}
+.gep-inline-editor-content,.gep-custom-editor-shell{padding:13px!important}
+
+.gep-structure-library{margin-top:10px!important;padding:14px!important;border:1px solid #dfe7e2!important;border-radius:12px!important;background:#fff!important;box-shadow:var(--gep-shadow-913)!important}
+.gep-structure-library-head{margin-bottom:11px!important}
+.gep-structure-library-grid{gap:9px!important}
+.gep-library-card{min-height:78px!important;border-color:#dfe7e2!important;border-radius:9px!important;background:#fff!important}
+.gep-library-card:hover,.gep-library-card:focus{border-color:#7da990!important;background:#f5faf7!important}
+
+/* Hide old duplicated UI no matter which editor is active */
+.gep-questionnaire>.gep-section-tools,.gep-questionnaire>.gep-section-visibility-tools,.gep-legacy-ui-hidden{display:none!important}
+
+/* Save toast */
+.gep-save-toast{position:fixed!important;right:26px!important;top:74px!important;z-index:10050!important;border-radius:10px!important;background:#123f2d!important;color:#fff!important;border:0!important;box-shadow:0 15px 35px rgba(11,52,35,.18)!important}
+
+/* --------------------------------------------------------------------------
+   Responsive / zoom behavior
+   -------------------------------------------------------------------------- */
+@media(min-width:1700px){
+  :root{--gep-sidebar-w:224px}
+  .gep-editor-wrap{padding-left:calc(var(--gep-sidebar-w) + 34px)!important;padding-right:34px!important}
+  .gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,.gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home,.gep-page-heading,.gep-contact-commandbar{max-width:none!important}
+  .gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,.gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home{grid-template-columns:minmax(0,1.18fr) minmax(500px,.82fr)!important}
+}
+
+@media(max-width:1280px){
+  :root{--gep-sidebar-w:188px}
+  .gep-editor-wrap{padding-left:calc(var(--gep-sidebar-w) + 22px)!important;padding-right:20px!important}
+  .gep-page-tab{padding-left:11px!important;font-size:12px!important}
+  .gep-contact-commandbar{align-items:flex-start!important;flex-wrap:wrap!important}
+  .gep-contact-commandbar-copy{flex:1 1 100%!important}
+  .gep-inline-save-state{margin-left:auto!important}
+  .gep-contact-commandbar-actions{width:100%!important;justify-content:flex-end!important}
+  .gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,.gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home{grid-template-columns:minmax(0,1fr) minmax(390px,.78fr)!important;gap:16px!important}
+}
+
+@media(max-width:1080px){
+  :root{--gep-sidebar-w:76px}
+  .gep-app-header{width:var(--gep-sidebar-w)!important;padding:17px 12px!important;height:86px!important}
+  .gep-brand{justify-content:center!important}.gep-brand-mark{width:42px!important;height:42px!important;flex-basis:42px!important}.gep-brand-mark img{width:40px!important;height:40px!important}.gep-brand-copy{display:none!important}
+  .gep-page-tabs{top:86px!important;width:var(--gep-sidebar-w)!important;padding:8px 8px 90px!important}
+  .gep-page-tab{justify-content:center!important;width:60px!important;height:48px!important;padding:0!important;margin:0 auto!important}
+  .gep-page-tab>span:last-child{display:none!important}.gep-page-tab .dashicons{font-size:21px!important}
+  .gep-sidebar-public{left:8px!important;right:8px!important;bottom:12px!important;min-height:48px!important;padding:0!important;display:grid!important;place-items:center!important}.gep-sidebar-public>span:last-child{display:none!important}.gep-sidebar-public>.dashicons{margin:0!important}
+  .gep-top-utility{left:var(--gep-sidebar-w)!important;padding-right:18px!important}
+  .gep-editor-wrap{padding-left:calc(var(--gep-sidebar-w) + 18px)!important;padding-right:18px!important}
+  .gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,.gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home{grid-template-columns:1fr!important}
+  .gep-preview-column{position:relative!important;top:auto!important}
+  .gep-parent-preview-card{max-width:none!important}
+}
+
+@media(max-width:782px){
+  :root{--gep-sidebar-w:0px;--gep-topbar-h:54px}
+  .gep-app-header{position:fixed!important;width:54px!important;height:54px!important;left:8px!important;top:0!important;padding:7px!important;background:transparent!important;z-index:10050!important}.gep-app-header:after{display:none!important}.gep-brand-mark{width:40px!important;height:40px!important;flex-basis:40px!important;border-radius:9px!important;background:#073b31!important}.gep-brand-mark img{width:34px!important;height:34px!important}.gep-brand-copy{display:none!important}
+  .gep-page-tabs{position:fixed!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;width:100%!important;height:61px!important;padding:6px 7px!important;display:flex!important;flex-direction:row!important;align-items:center!important;gap:2px!important;background:#07382f!important;overflow-x:auto!important;overflow-y:hidden!important;z-index:10060!important}
+  .gep-page-tabs:after,.gep-sidebar-public{display:none!important}
+  .gep-page-tab{flex:1 0 52px!important;width:auto!important;min-width:52px!important;height:48px!important;min-height:48px!important;border-radius:8px!important}
+  .gep-page-tab>span:last-child{display:none!important}
+  .gep-top-utility{left:0!important;height:var(--gep-topbar-h)!important;padding:0 10px 0 62px!important}.gep-user-name,.gep-user-chevron,.gep-top-divider{display:none!important}.gep-top-help{margin-right:auto!important}
+  .gep-editor-wrap{padding:calc(var(--gep-topbar-h) + 18px) 10px 82px!important}
+  .gep-page-heading,.gep-contact-commandbar{margin-left:0!important;margin-right:0!important}
+  .gep-breadcrumb{margin-bottom:12px!important}.gep-title-row h2{font-size:24px!important}
+  .gep-contact-commandbar{padding:12px!important;min-height:0!important}.gep-contact-commandbar-copy{flex-wrap:wrap!important}.gep-contact-command-icon{width:44px!important;height:44px!important;flex-basis:44px!important}.gep-inline-save-state{order:3;width:100%!important;min-width:0!important;min-height:40px!important;margin:0!important}.gep-inline-save-state:after{white-space:normal!important}.gep-contact-commandbar-actions{display:grid!important;grid-template-columns:1fr 1fr!important;width:100%!important}.gep-contact-commandbar-actions .gep-save-button{grid-column:1/-1!important}
+  .gep-structure-head{align-items:flex-start!important;gap:10px!important}.gep-structure-head .gep-structure-add{min-width:124px!important}
+  .gep-structure-summary{grid-template-columns:22px 34px 26px minmax(0,1fr) 22px!important}.gep-structure-status{display:none!important}
+  .gep-structure-overview{grid-template-columns:1fr!important}.gep-structure-card-visual{height:150px!important}
+  .gep-structure-library-grid{grid-template-columns:1fr!important}
+}
+
+
+/* ========================================================================== 
+   v9.13.1 · Compact responsive shell
+   - Removes the profile controls from the utility bar.
+   - Prevents horizontal overflow and scales the workspace with the viewport.
+   ========================================================================== */
+
+/* The utility row is now help-only and intentionally compact. */
+.gep-top-utility{
+  height:48px!important;
+  padding:0 clamp(12px,1.6vw,24px)!important;
+}
+:root{--gep-topbar-h:48px}
+.gep-top-help{margin-left:auto!important}
+.gep-top-divider,.gep-user-badge,.gep-user-name,.gep-user-chevron{display:none!important}
+
+/* Fluid workspace: never grow wider than the browser. */
+html,body.toplevel_page_gep-content-editor{max-width:100%!important;overflow-x:hidden!important}
+body.toplevel_page_gep-content-editor #wpwrap,
+body.toplevel_page_gep-content-editor #wpcontent,
+body.toplevel_page_gep-content-editor #wpbody,
+body.toplevel_page_gep-content-editor #wpbody-content{max-width:100%!important;overflow-x:hidden!important}
+.gep-editor-wrap{
+  width:auto!important;
+  max-width:100%!important;
+  min-width:0!important;
+  padding-top:calc(var(--gep-topbar-h) + clamp(14px,1.4vw,24px))!important;
+  padding-right:clamp(12px,1.65vw,28px)!important;
+  padding-bottom:40px!important;
+  padding-left:calc(var(--gep-sidebar-w) + clamp(14px,1.65vw,28px))!important;
+  overflow-x:hidden!important;
+}
+.gep-page-heading,.gep-contact-commandbar,
+.gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,
+.gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+}
+.gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,
+.gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home{
+  grid-template-columns:minmax(0,1.55fr) minmax(320px,.78fr)!important;
+  gap:clamp(14px,1.3vw,22px)!important;
+}
+.gep-questionnaire,.gep-preview-column,.gep-parent-preview-card,.gep-structure-manager,
+.gep-structure-list,.gep-structure-row,.gep-structure-row-panel,.gep-structure-overview,
+.gep-contact-commandbar-copy,.gep-contact-commandbar-actions{min-width:0!important;max-width:100%!important}
+.gep-preview-column{width:100%!important}
+.gep-parent-preview-card{width:100%!important;overflow:hidden!important}
+.gep-directory-device-stage,.gep-contact-device-stage,.gep-docencia-device-stage,.gep-project-device-stage,
+.gep-publication-device-stage,.gep-home-device-stage,.gep-hub-device-stage{max-width:100%!important;overflow:auto!important}
+.gep-structure-copy,.gep-preview-heading-title-row{min-width:0!important}
+.gep-structure-copy strong,.gep-structure-copy small,.gep-preview-heading-title-row h3{
+  overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important
+}
+
+/* Large monitors should gain useful canvas, not oversized controls. */
+@media(min-width:1700px){
+  :root{--gep-sidebar-w:212px}
+  .gep-editor-wrap{padding-left:calc(var(--gep-sidebar-w) + 28px)!important;padding-right:28px!important}
+  .gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,
+  .gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home{
+    grid-template-columns:minmax(0,1.65fr) minmax(360px,.72fr)!important;
+  }
+}
+
+/* Normal notebook / browser widths: keep both panes without forcing scroll. */
+@media(max-width:1450px){
+  :root{--gep-sidebar-w:184px}
+  .gep-app-header,.gep-page-tabs{width:var(--gep-sidebar-w)!important}
+  .gep-top-utility{left:var(--gep-sidebar-w)!important}
+  .gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,
+  .gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home{
+    grid-template-columns:minmax(0,1fr) minmax(330px,.68fr)!important;
+  }
+  .gep-contact-commandbar{gap:12px!important}
+  .gep-inline-save-state{min-width:170px!important}
+  .gep-contact-commandbar .button{padding-left:12px!important;padding-right:12px!important}
+}
+
+/* When the browser becomes too narrow for a useful side-by-side editor,
+   stack the preview instead of creating a horizontal scrollbar. */
+@media(max-width:1180px){
+  :root{--gep-sidebar-w:76px}
+  .gep-app-header{width:var(--gep-sidebar-w)!important;height:86px!important;padding:17px 12px!important}
+  .gep-brand{justify-content:center!important}.gep-brand-mark{width:42px!important;height:42px!important;flex-basis:42px!important}.gep-brand-mark img{width:40px!important;height:40px!important}.gep-brand-copy{display:none!important}
+  .gep-page-tabs{top:86px!important;width:var(--gep-sidebar-w)!important;padding:8px 8px 90px!important}
+  .gep-page-tab{justify-content:center!important;width:60px!important;height:48px!important;padding:0!important;margin:0 auto!important}
+  .gep-page-tab>span:last-child{display:none!important}.gep-page-tab .dashicons{font-size:21px!important}
+  .gep-sidebar-public{left:8px!important;right:8px!important;bottom:12px!important;min-height:48px!important;padding:0!important;display:grid!important;place-items:center!important}.gep-sidebar-public>span:last-child{display:none!important}.gep-sidebar-public>.dashicons{margin:0!important}
+  .gep-top-utility{left:var(--gep-sidebar-w)!important}
+  .gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,
+  .gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home{grid-template-columns:minmax(0,1fr)!important}
+  .gep-preview-column{position:relative!important;top:auto!important;width:100%!important}
+  .gep-parent-preview-card{max-width:100%!important}
+  .gep-contact-commandbar{align-items:flex-start!important;flex-wrap:wrap!important}
+  .gep-contact-commandbar-copy{flex:1 1 100%!important;flex-wrap:wrap!important}
+  .gep-inline-save-state{margin-left:auto!important}
+  .gep-contact-commandbar-actions{width:100%!important;justify-content:flex-end!important;flex-wrap:wrap!important}
+}
+
+@media(max-width:782px){
+  :root{--gep-sidebar-w:0px;--gep-topbar-h:46px}
+  .gep-top-utility{left:0!important;height:var(--gep-topbar-h)!important;padding:0 10px 0 62px!important}
+  .gep-top-help{margin-left:auto!important;margin-right:0!important}
+  .gep-editor-wrap{padding:calc(var(--gep-topbar-h) + 14px) 10px 82px!important}
+  .gep-contact-commandbar-actions{display:grid!important;grid-template-columns:1fr 1fr!important;width:100%!important}
+  .gep-contact-commandbar-actions .button{width:100%!important;min-width:0!important}
+  .gep-contact-commandbar-actions .gep-save-button{grid-column:1/-1!important}
+}
+
+
+/* ==========================================================================\n   v9.13.2 · Native WordPress drawer + clean GEP sidebar\n   The WordPress chrome stays out of the way by default, but can be summoned\n   as an overlay without shifting the editor canvas.\n   ========================================================================== */
+
+/* The GEP rail may still scroll on very short screens, but it should never
+   display a second visual scrollbar beside the editor. */
+.gep-page-tabs{
+  scrollbar-width:none!important;
+  -ms-overflow-style:none!important;
+}
+.gep-page-tabs::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}
+
+.gep-wp-drawer-toggle{
+  position:fixed!important;
+  z-index:10095!important;
+  top:132px!important;
+  left:calc(var(--gep-sidebar-w) - 15px)!important;
+  min-width:31px!important;
+  height:38px!important;
+  padding:0 9px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  border:1px solid rgba(255,255,255,.25)!important;
+  border-radius:0 9px 9px 0!important;
+  background:#0c6f50!important;
+  color:#fff!important;
+  box-shadow:0 7px 20px rgba(4,48,35,.18)!important;
+  cursor:pointer!important;
+  transition:left .2s ease,background .15s ease,transform .15s ease!important;
+}
+.gep-wp-drawer-toggle:hover{background:#0a8059!important;transform:translateX(1px)}
+.gep-wp-drawer-toggle .dashicons{width:18px!important;height:18px!important;font-size:18px!important;line-height:18px!important}
+.gep-wp-drawer-label{display:none!important;font-size:11px!important;font-weight:750!important;white-space:nowrap!important}
+.gep-wp-drawer-toggle:focus-visible{outline:2px solid #fff!important;outline-offset:2px!important}
+
+/* Opening the native WordPress navigation is an overlay action. The editing
+   workspace keeps its exact width and position. */
+body.toplevel_page_gep-content-editor.gep-native-nav-open #adminmenumain,
+body.toplevel_page_gep-content-editor.gep-native-nav-open #wpadminbar{
+  display:block!important;
+}
+body.toplevel_page_gep-content-editor.gep-native-nav-open #adminmenumain{
+  position:fixed!important;
+  z-index:10080!important;
+  top:32px!important;
+  left:0!important;
+  bottom:0!important;
+  filter:drop-shadow(8px 0 18px rgba(0,0,0,.16));
+}
+body.toplevel_page_gep-content-editor.gep-native-nav-open #wpadminbar{
+  position:fixed!important;
+  z-index:10085!important;
+  top:0!important;
+  left:0!important;
+  right:0!important;
+}
+body.toplevel_page_gep-content-editor.gep-native-nav-open .gep-app-header,
+body.toplevel_page_gep-content-editor.gep-native-nav-open .gep-page-tabs{
+  transform:translateX(-105%)!important;
+  transition:transform .2s ease!important;
+}
+.gep-app-header,.gep-page-tabs{transition:transform .2s ease!important}
+body.toplevel_page_gep-content-editor.gep-native-nav-open .gep-wp-drawer-toggle{
+  left:var(--gep-native-admin-w,160px)!important;
+  top:48px!important;
+  border-color:#0c6f50!important;
+  background:#fff!important;
+  color:#0b5e43!important;
+  border-radius:0 9px 9px 0!important;
+  box-shadow:0 7px 20px rgba(0,0,0,.16)!important;
+}
+body.toplevel_page_gep-content-editor.gep-native-nav-open .gep-wp-drawer-toggle .gep-wp-drawer-label{display:inline!important}
+body.toplevel_page_gep-content-editor.gep-native-nav-open .gep-wp-drawer-toggle:hover{background:#eff8f3!important}
+
+@media(max-width:1180px){
+  .gep-wp-drawer-toggle{top:100px!important;left:calc(var(--gep-sidebar-w) - 14px)!important}
+}
+@media(max-width:782px){
+  .gep-wp-drawer-toggle{top:8px!important;left:8px!important;border-radius:8px!important}
+  body.toplevel_page_gep-content-editor.gep-native-nav-open .gep-wp-drawer-toggle{top:40px!important;left:var(--gep-native-admin-w,190px)!important;border-radius:0 8px 8px 0!important}
+  body.toplevel_page_gep-content-editor.gep-native-nav-open #adminmenumain{top:46px!important}
+}
+
+/* ==========================================================================
+   v9.13.3 · Compact top area
+   Removes the empty horizontal band above the page heading. Help remains as
+   a small floating action and no longer reserves vertical workspace.
+   ========================================================================== */
+:root{--gep-topbar-h:0px}
+
+.gep-top-utility{
+  position:fixed!important;
+  z-index:10040!important;
+  top:8px!important;
+  right:clamp(10px,1.4vw,22px)!important;
+  left:auto!important;
+  width:auto!important;
+  height:auto!important;
+  min-height:0!important;
+  padding:0!important;
+  display:block!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  pointer-events:none!important;
+}
+.gep-top-help{
+  min-height:32px!important;
+  margin:0!important;
+  padding:6px 10px!important;
+  background:rgba(255,255,255,.90)!important;
+  border:1px solid #e0e8e3!important;
+  box-shadow:0 4px 14px rgba(18,43,29,.045)!important;
+  pointer-events:auto!important;
+}
+.gep-top-help:hover{background:#fff!important}
+
+.gep-editor-wrap{
+  padding-top:18px!important;
+}
+.gep-page-heading{
+  margin-top:0!important;
+  margin-bottom:16px!important;
+}
+.gep-breadcrumb{margin-top:0!important;margin-bottom:12px!important}
+
+@media(max-width:1180px){
+  .gep-editor-wrap{padding-top:14px!important}
+  .gep-top-utility{top:7px!important;right:12px!important}
+}
+
+@media(max-width:782px){
+  :root{--gep-topbar-h:0px}
+  .gep-editor-wrap{padding:12px 10px 82px!important}
+  .gep-top-utility{top:7px!important;right:8px!important;left:auto!important;padding:0!important}
+  .gep-top-help{min-height:30px!important;padding:5px 8px!important}
+}
+
+/* ==========================================================================
+   v9.13.5 · Fixed sidebar
+   The GEP navigation rail is not a scrollable panel. Mouse-wheel input over
+   the rail now continues to the main editor instead of moving the menu.
+   ========================================================================== */
+.gep-page-tabs{
+  overflow-y:hidden!important;
+  overflow-x:hidden!important;
+}
+
+/* Keep every navigation entry visible on shorter notebook windows without
+   reintroducing a second scrolling region. */
+@media (min-width:783px) and (max-height:760px){
+  .gep-app-header{
+    height:102px!important;
+    padding-top:16px!important;
+    padding-bottom:10px!important;
+  }
+  .gep-page-tabs{
+    top:102px!important;
+    padding-top:6px!important;
+    padding-bottom:94px!important;
+    gap:1px!important;
+  }
+  .gep-page-tab{
+    min-height:43px!important;
+    height:43px!important;
+    flex-basis:43px!important;
+  }
+  .gep-sidebar-public{
+    bottom:10px!important;
+    min-height:58px!important;
+    padding:10px!important;
+  }
+}
+
+@media (min-width:783px) and (max-height:650px){
+  .gep-app-header{
+    height:86px!important;
+    padding:10px 14px!important;
+  }
+  .gep-brand-mark{
+    width:40px!important;
+    height:40px!important;
+    flex-basis:40px!important;
+  }
+  .gep-brand-mark img{width:38px!important;height:38px!important}
+  .gep-brand-copy strong{font-size:21px!important}
+  .gep-brand-copy small{display:none!important}
+  .gep-page-tabs{
+    top:86px!important;
+    padding:4px 10px 66px!important;
+    gap:0!important;
+  }
+  .gep-page-tab{
+    min-height:38px!important;
+    height:38px!important;
+    flex-basis:38px!important;
+  }
+  .gep-sidebar-public{
+    min-height:46px!important;
+    bottom:8px!important;
+    padding:7px 10px!important;
+  }
+  .gep-sidebar-public small{display:none!important}
+}
+
+
+/* ========================================================================== 
+   v9.13.6 · Preview legible + carga limpia
+   - La preview recupera protagonismo horizontal sin comerse todo el editor.
+   - Altura contenida con scroll interno: no crece hasta el final de la ventana.
+   - Tipografía de previews ampliada para lectura real.
+   - Pantalla de carga GEP oculta la construcción progresiva del editor.
+   ========================================================================== */
+
+/* Loader de entrada: aparece antes de que JS convierta los formularios legacy
+   en el editor modular definitivo. */
+.gep-editor-loader{
+  position:fixed!important;
+  inset:0!important;
+  z-index:110000!important;
+  display:grid!important;
+  place-content:center!important;
+  justify-items:center!important;
+  gap:7px!important;
+  padding:24px!important;
+  background:
+    radial-gradient(circle at 50% 43%,rgba(27,126,82,.075),transparent 20%),
+    #f4f7f5!important;
+  color:#123b29!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transition:opacity .24s ease,visibility .24s ease!important;
+}
+.gep-editor-loader.is-done{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+.gep-editor-loader-tree{width:92px;height:92px;margin-bottom:5px}
+.gep-editor-loader-tree svg{display:block;width:100%;height:100%;overflow:visible}
+.gep-loader-ground,.gep-loader-trunk,.gep-loader-branch{
+  fill:none;stroke:#176a48;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:90;stroke-dashoffset:90;
+  animation:gep-tree-draw .72s cubic-bezier(.3,.7,.3,1) forwards;
+}
+.gep-loader-ground{stroke:#82ad96;stroke-width:3;animation-delay:.05s}
+.gep-loader-branch-a{animation-delay:.20s}.gep-loader-branch-b{animation-delay:.30s}.gep-loader-branch-c{animation-delay:.40s}
+.gep-loader-leaf{fill:#2f8c60;opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.15);animation:gep-leaf-grow .42s cubic-bezier(.2,.85,.3,1.25) forwards}
+.gep-loader-leaf-1{animation-delay:.38s}.gep-loader-leaf-2{animation-delay:.46s}.gep-loader-leaf-3{animation-delay:.54s}.gep-loader-leaf-4{animation-delay:.62s}.gep-loader-leaf-5{animation-delay:.70s}
+.gep-editor-loader strong{font-size:15px;font-weight:780;letter-spacing:-.01em;color:#173b2a}
+.gep-editor-loader span{font-size:11px;color:#728078}
+@keyframes gep-tree-draw{to{stroke-dashoffset:0}}
+@keyframes gep-leaf-grow{to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.gep-loader-ground,.gep-loader-trunk,.gep-loader-branch,.gep-loader-leaf{animation:none!important;stroke-dashoffset:0!important;opacity:1!important;transform:none!important}}
+
+/* La referencia visual elegida usa una preview bastante más ancha. */
+@media(min-width:1451px){
+  .gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,
+  .gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home,.gep-editor-layout-hub{
+    grid-template-columns:minmax(0,1.22fr) minmax(560px,.92fr)!important;
+    gap:20px!important;
+  }
+}
+@media(min-width:1181px) and (max-width:1450px){
+  .gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,
+  .gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home,.gep-editor-layout-hub{
+    grid-template-columns:minmax(0,1.12fr) minmax(470px,.88fr)!important;
+    gap:16px!important;
+  }
+}
+
+/* La preview deja de ser una columna interminable. Todo el documento sigue
+   disponible mediante scroll dentro de la propia vista previa. */
+@media(min-width:1181px){
+  .gep-parent-preview-card{
+    max-height:min(590px,calc(100vh - 118px))!important;
+  }
+  .gep-directory-device-stage,.gep-contact-device-stage,.gep-docencia-device-stage,
+  .gep-project-device-stage,.gep-publication-device-stage,.gep-home-device-stage,.gep-hub-device-stage{
+    flex:1 1 auto!important;
+    min-height:0!important;
+    max-height:min(500px,calc(100vh - 205px))!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable!important;
+  }
+  .gep-hub-browser .gep-preview-stage{min-height:330px!important}
+}
+
+/* Legibilidad de Inicio. */
+.gep-parent-preview-card .gep-home-prev-hero small,
+.gep-parent-preview-card .gep-home-prev-section small,
+.gep-parent-preview-card .gep-home-prev-field small,
+.gep-parent-preview-card .gep-home-prev-landscape small,
+.gep-parent-preview-card .gep-home-prev-network small,
+.gep-parent-preview-card .gep-home-prev-cta small{font-size:7.2px!important}
+.gep-parent-preview-card .gep-home-prev-hero p{font-size:10px!important}
+.gep-parent-preview-card .gep-home-prev-hero b,.gep-parent-preview-card .gep-home-prev-cta b{font-size:8px!important}
+.gep-parent-preview-card .gep-home-prev-hero i{font-size:6.5px!important}
+.gep-parent-preview-card .gep-home-prev-section p,
+.gep-parent-preview-card .gep-home-prev-field p,
+.gep-parent-preview-card .gep-home-prev-network p{font-size:8.3px!important}
+.gep-parent-preview-card .gep-home-prev-pills span{font-size:7.1px!important}
+.gep-parent-preview-card .gep-home-prev-stat span{font-size:8px!important}
+.gep-parent-preview-card .gep-home-prev-stat small{font-size:6.8px!important}
+.gep-parent-preview-card .gep-home-prev-definition small{font-size:7px!important}
+.gep-parent-preview-card .gep-home-prev-definition p{font-size:8px!important}
+.gep-parent-preview-card .gep-home-prev-card-copy small{font-size:6.8px!important}
+.gep-parent-preview-card .gep-home-prev-card-copy strong{font-size:9px!important}
+.gep-parent-preview-card .gep-home-prev-card-copy p{font-size:7.4px!important}
+.gep-parent-preview-card .gep-home-prev-portal strong{font-size:9px!important}
+.gep-parent-preview-card .gep-home-prev-portal p{font-size:7px!important}
+.gep-parent-preview-card .gep-home-prev-resource small{font-size:6.8px!important}
+.gep-parent-preview-card .gep-home-prev-resource strong{font-size:9px!important}
+.gep-parent-preview-card .gep-home-prev-resource b{font-size:7px!important}
+.gep-parent-preview-card .gep-home-prev-topics span{font-size:7.2px!important}
+.gep-parent-preview-card .gep-home-prev-note{font-size:8px!important}
+
+/* Legibilidad de Comunicaciones / Noticias. */
+.gep-parent-preview-card .gep-hub-live-hero>span{font-size:9px!important}
+.gep-parent-preview-card .gep-hub-live-hero h4{font-size:34px!important}
+.gep-parent-preview-card .gep-hub-live-hero p{font-size:11px!important}
+.gep-parent-preview-card .gep-hub-live-nav span,
+.gep-parent-preview-card .gep-hub-live-nav b{font-size:8.5px!important}
+.gep-parent-preview-card .gep-hub-live-section-head span{font-size:7.5px!important}
+.gep-parent-preview-card .gep-hub-live-section-head strong{font-size:17px!important}
+.gep-parent-preview-card .gep-hub-preview-media{font-size:8px!important}
+.gep-parent-preview-card .gep-hub-preview-copy small{font-size:7.5px!important}
+.gep-parent-preview-card .gep-hub-preview-copy strong{font-size:10px!important}
+.gep-parent-preview-card .gep-hub-preview-copy p{font-size:8.5px!important}
+.gep-parent-preview-card .gep-hub-preview-empty{font-size:10px!important}
+
+/* Contacto: etiquetas y datos dejan de parecer microtexto. */
+.gep-parent-preview-card .gep-contact-live-eyebrow{font-size:8.5px!important}
+.gep-parent-preview-card .gep-contact-live-hero p{font-size:11px!important}
+.gep-parent-preview-card .gep-contact-live-card h3{font-size:15px!important}
+.gep-parent-preview-card .gep-contact-live-row strong{font-size:8px!important}
+.gep-parent-preview-card .gep-contact-live-row span{font-size:9px!important}
+.gep-parent-preview-card .gep-contact-live-button{font-size:8px!important}
+.gep-parent-preview-card .gep-contact-live-map-copy span{font-size:7.5px!important}
+.gep-parent-preview-card .gep-contact-live-map-copy strong{font-size:13px!important}
+.gep-parent-preview-card .gep-contact-live-map-copy small{font-size:8.5px!important}
+.gep-parent-preview-card .gep-contact-live-note p{font-size:8.5px!important}
+.gep-parent-preview-card .gep-contact-live-cta h3{font-size:13px!important}
+
+/* Docencia / Proyectos / Publicaciones: regla común de mínimo visual legible. */
+.gep-parent-preview-card .gep-docencia-live-preview p,
+.gep-parent-preview-card .gep-project-live-preview p,
+.gep-parent-preview-card .gep-publication-live-preview p{font-size:9px!important;line-height:1.48!important}
+.gep-parent-preview-card .gep-docencia-live-preview small,
+.gep-parent-preview-card .gep-project-live-preview small,
+.gep-parent-preview-card .gep-publication-live-preview small{font-size:7.3px!important}
+
+/* En pantallas apiladas la preview vuelve a crecer naturalmente, pero sigue
+   sin imponer una altura mínima artificial. */
+@media(max-width:1180px){
+  .gep-parent-preview-card{max-height:none!important}
+  .gep-hub-browser .gep-preview-stage{min-height:300px!important}
+}
+
+
+/* ========================================================================== 
+   v9.13.7 · Match visual de referencia
+   - Proporción editor / preview cercana a 50 / 50.
+   - Preview más alta y legible.
+   - Encabezado público visible dentro de la preview.
+   - Tarjetas y apartado abierto con la jerarquía del mockup aprobado.
+   ========================================================================== */
+
+:root{
+  --gep-shell:#f8faf9;
+  --gep-card:#fff;
+}
+body.toplevel_page_gep-content-editor,
+.gep-editor-wrap{background:#f8faf9!important}
+
+/* El bloque superior se comporta como "Estado de la página" sin cambiar la
+   lógica ni los controles que ya funcionan. */
+.gep-contact-commandbar-copy>div>strong{font-size:0!important}
+.gep-contact-commandbar-copy>div>strong:after{
+  content:"Estado de la página";
+  font-size:15px!important;
+  line-height:1.2;
+  font-weight:780;
+  color:#17231c;
+}
+.gep-contact-commandbar-copy>div>small{font-size:0!important}
+.gep-contact-commandbar-copy>div>small:after{
+  content:"Revisa el contenido, la vista previa y guarda cuando esté listo.";
+  font-size:10.5px!important;
+  line-height:1.35;
+  color:#77837c;
+}
+
+/* Distribución principal: la preview deja de sentirse secundaria. */
+@media(min-width:1451px){
+  .gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,
+  .gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home,.gep-editor-layout-hub{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:24px!important;
+  }
+}
+@media(min-width:1181px) and (max-width:1450px){
+  .gep-editor-layout,.gep-editor-layout-contact,.gep-editor-layout-directory,.gep-editor-layout-docencia,
+  .gep-editor-layout-projects,.gep-editor-layout-publications,.gep-editor-layout-home,.gep-editor-layout-hub{
+    grid-template-columns:minmax(0,1.04fr) minmax(440px,.96fr)!important;
+    gap:18px!important;
+  }
+}
+
+/* Preview: altura útil parecida al diseño aprobado, con scroll dentro de ella
+   y no en una tarjeta interminable. */
+@media(min-width:1181px){
+  .gep-preview-column{top:18px!important}
+  .gep-parent-preview-card{
+    min-height:min(690px,calc(100vh - 78px))!important;
+    height:min(760px,calc(100vh - 78px))!important;
+    max-height:min(760px,calc(100vh - 78px))!important;
+    padding:15px!important;
+  }
+  .gep-directory-device-stage,.gep-contact-device-stage,.gep-docencia-device-stage,
+  .gep-project-device-stage,.gep-publication-device-stage,.gep-home-device-stage,.gep-hub-device-stage{
+    flex:1 1 auto!important;
+    min-height:0!important;
+    height:auto!important;
+    max-height:none!important;
+    overflow:auto!important;
+    padding-bottom:0!important;
+  }
+  .gep-directory-browser,.gep-contact-live-preview,.gep-docencia-live-preview,
+  .gep-project-live-preview,.gep-publication-live-preview,.gep-home-live-preview,.gep-hub-browser{
+    min-height:100%!important;
+  }
+}
+
+/* Cabecera de la tarjeta de preview: limpia y estable; el nombre del apartado
+   sigue siendo gestionado internamente, pero no compite visualmente con el modo. */
+.gep-parent-preview-card>.gep-preview-heading{
+  min-height:58px!important;
+  margin-bottom:12px!important;
+  gap:10px!important;
+}
+.gep-preview-heading-copy{min-width:180px!important;flex:1 1 auto!important}
+.gep-preview-heading-copy:before{
+  content:"Vista previa de la página";
+  display:block;
+  font-size:14px;
+  line-height:1.2;
+  font-weight:780;
+  color:#17231c;
+}
+.gep-preview-heading-copy:after{
+  content:"Así se ve tu contenido para las personas usuarias.";
+  display:block;
+  margin-top:3px;
+  font-size:9.5px;
+  line-height:1.3;
+  color:#7a867f;
+}
+.gep-preview-heading-title-row{display:none!important}
+.gep-preview-icon{width:38px!important;height:38px!important;flex:0 0 38px!important}
+.gep-preview-mode-switcher,.gep-preview-device-switcher{flex:0 0 auto!important}
+
+/* Encabezado realista del sitio dentro de todos los marcos de preview. */
+.gep-preview-site-header{
+  height:48px;
+  padding:0 15px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  background:#fff;
+  border-bottom:1px solid #e3e9e5;
+  color:#234334;
+  overflow:hidden;
+}
+.gep-preview-site-brand{display:flex;align-items:center;gap:7px;min-width:115px;flex:0 0 auto}
+.gep-preview-site-mark{position:relative;width:22px;height:22px;display:grid;grid-template-columns:1fr 1fr;gap:1px;transform:rotate(45deg)}
+.gep-preview-site-mark i{display:block;background:#57a873;border-radius:1px}
+.gep-preview-site-mark i:nth-child(2),.gep-preview-site-mark i:nth-child(3){background:#2b865a}
+.gep-preview-site-brand>span:last-child{display:flex;align-items:center;gap:5px;white-space:nowrap}
+.gep-preview-site-brand b{font-size:8px;letter-spacing:.02em;color:#43835f}
+.gep-preview-site-brand em{font-size:9px;font-style:normal;font-weight:800;color:#173e2b;border-left:1px solid #bfcfc5;padding-left:5px}
+.gep-preview-site-nav{margin-left:auto;display:flex;align-items:center;justify-content:flex-end;gap:14px;white-space:nowrap;min-width:0;overflow:hidden}
+.gep-preview-site-nav span{font-size:6.8px;font-weight:650;color:#334b3d}
+.gep-preview-site-search{font-size:12px!important;width:12px!important;height:12px!important;line-height:12px!important;color:#597065!important;flex:0 0 auto}
+.is-device-tablet .gep-preview-site-nav span:nth-child(n+5){display:none}
+.is-device-mobile .gep-preview-site-header{height:42px;padding:0 10px}
+.is-device-mobile .gep-preview-site-brand{min-width:auto}
+.is-device-mobile .gep-preview-site-brand b{display:none}
+.is-device-mobile .gep-preview-site-nav{gap:7px}
+.is-device-mobile .gep-preview-site-nav span:nth-child(n+3){display:none}
+
+/* Tarjetas de secciones con más aire y jerarquía tipográfica. */
+.gep-structure-list{gap:12px!important}
+.gep-structure-summary{
+  min-height:78px!important;
+  padding:13px 16px!important;
+  grid-template-columns:26px 46px 32px minmax(0,1fr) auto 26px!important;
+  gap:10px!important;
+}
+.gep-structure-number{
+  width:42px!important;height:42px!important;
+  font-size:14px!important;
+}
+.gep-structure-type-icon{width:31px!important;height:31px!important;border-radius:8px!important}
+.gep-structure-copy strong{font-size:14px!important;line-height:1.2!important;font-weight:740!important}
+.gep-structure-copy small{font-size:9.5px!important;margin-top:4px!important}
+.gep-structure-status{padding:6px 11px!important;font-size:9px!important}
+.gep-structure-row{border-radius:13px!important}
+
+/* Apartado abierto: imagen más protagonista, datos legibles y botón de edición
+   igual al patrón visual que se aprobó. */
+.gep-structure-overview{
+  grid-template-columns:165px minmax(0,1fr)!important;
+  gap:18px!important;
+  padding:16px 17px 18px!important;
+}
+.gep-structure-card-visual{
+  height:184px!important;
+  border-radius:10px!important;
+  background:#edf3ef!important;
+}
+.gep-structure-overview-type{font-size:8.5px!important;letter-spacing:.10em!important}
+.gep-structure-overview-top{margin-bottom:10px!important}
+.gep-structure-overview-top strong{font-size:14px!important;line-height:1.25!important}
+.gep-structure-overview-top .gep-structure-edit{
+  min-height:38px!important;
+  padding:5px 13px!important;
+  font-size:10px!important;
+  border-radius:8px!important;
+}
+.gep-structure-summary-rows{gap:7px!important}
+.gep-structure-summary-line{
+  min-height:35px!important;
+  grid-template-columns:19px minmax(82px,112px) minmax(0,1fr)!important;
+  padding:8px 10px!important;
+  border-radius:8px!important;
+}
+.gep-structure-summary-line>.dashicons{font-size:14px!important;width:14px!important;height:14px!important;line-height:14px!important}
+.gep-structure-summary-line b{font-size:9.8px!important;line-height:1.35!important}
+.gep-structure-summary-line em{font-size:9.8px!important;line-height:1.4!important}
+.gep-structure-overview-foot{margin-top:12px!important}
+
+/* Vista previa interna: escala tipográfica ligeramente mayor para que no parezca
+   una miniatura ilegible dentro de una columna ya amplia. */
+.gep-parent-preview-card .gep-home-prev-hero h2{font-size:36px!important;max-width:88%!important}
+.gep-parent-preview-card .gep-home-prev-section h3,
+.gep-parent-preview-card .gep-home-prev-landscape h3,
+.gep-parent-preview-card .gep-home-prev-network h3,
+.gep-parent-preview-card .gep-home-prev-cta h3{font-size:17px!important}
+.gep-parent-preview-card .gep-home-prev-card-copy strong,
+.gep-parent-preview-card .gep-home-prev-portal strong,
+.gep-parent-preview-card .gep-home-prev-resource strong{font-size:10px!important}
+
+@media(max-width:1350px) and (min-width:1181px){
+  .gep-structure-overview{grid-template-columns:145px minmax(0,1fr)!important}
+  .gep-structure-card-visual{height:170px!important}
+  .gep-preview-heading-copy:after{display:none}
+}
+@media(max-width:782px){
+  .gep-preview-heading-copy:before{font-size:13px}
+  .gep-preview-heading-copy:after{font-size:9px}
+  .gep-structure-summary{min-height:68px!important;padding:10px!important;grid-template-columns:22px 38px 28px minmax(0,1fr) 22px!important}
+  .gep-structure-number{width:36px!important;height:36px!important;font-size:12px!important}
+  .gep-structure-overview{grid-template-columns:1fr!important}
+  .gep-structure-card-visual{height:170px!important}
+}
+
+/* ==========================================================================
+   v9.18.0 · Correcciones visuales del editor
+   ========================================================================== */
+
+/* Botones de la barra superior (Restaurar original, Ver página real, Guardar):
+   icono y texto centrados en la misma línea, sin depender de estilos de WordPress. */
+.gep-contact-commandbar .button{line-height:1.2!important;white-space:nowrap!important;text-decoration:none!important}
+.gep-contact-commandbar .button>.dashicons{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  flex:0 0 18px!important;width:18px!important;height:18px!important;
+  font-size:18px!important;line-height:1!important;
+  margin:0!important;padding:0!important;position:static!important;top:auto!important;
+  vertical-align:middle!important;transform:none!important;
+}
+.gep-contact-commandbar .button>.dashicons:before{display:block;line-height:1!important}
+
+/* Cabecera "Vista previa de la página": arriba el título en una línea con su
+   descripción debajo; abajo, en una fila propia, Apartado/General a la
+   izquierda y PC/Tablet/Móvil a la derecha. */
+.gep-parent-preview-card>.gep-preview-heading{flex-wrap:wrap!important;row-gap:10px!important;column-gap:10px!important}
+.gep-preview-heading-copy{display:block!important;flex:1 1 calc(100% - 50px)!important;min-width:0!important}
+.gep-preview-heading-copy:before{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gep-preview-heading-copy:after{display:block}
+.gep-parent-preview-card .gep-preview-mode-switcher{order:2!important;margin:0!important;width:auto!important}
+.gep-parent-preview-card .gep-preview-device-switcher{order:3!important;margin:0 0 0 auto!important}
+.gep-parent-preview-card .gep-preview-mode-switcher,
+.gep-parent-preview-card .gep-preview-device-switcher{flex-wrap:nowrap!important;white-space:nowrap!important}
+.gep-parent-preview-card .gep-preview-device-switcher>button,
+.gep-parent-preview-card .gep-preview-mode-button{white-space:nowrap!important;flex:0 0 auto!important}
+@media(max-width:1350px) and (min-width:1181px){.gep-preview-heading-copy:after{display:block}}
+@media(max-width:782px){
+  .gep-parent-preview-card .gep-preview-mode-switcher,
+  .gep-parent-preview-card .gep-preview-device-switcher{flex:1 1 100%!important;width:100%!important;margin:0!important;justify-content:center!important}
+  .gep-parent-preview-card .gep-preview-mode-button,
+  .gep-parent-preview-card .gep-preview-device-switcher>button{flex:1 1 0!important;justify-content:center!important}
+}
+
+/* Fondo de la cabecera: Imagen o Video en un solo control (solo en headers). */
+.gep-hero-media-switch{padding:13px 14px 14px!important;border:1px solid #dae3dd;border-radius:12px;background:#fbfcfb}
+.gep-hero-media-head{display:flex;align-items:center;justify-content:space-between;gap:10px 14px;flex-wrap:wrap;margin-bottom:12px}
+.gep-hero-media-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+.gep-hero-media-copy .gep-field-label{margin:0!important}
+.gep-hero-media-copy small{font-size:11px;color:#728078}
+.gep-hero-media-tabs{display:flex;align-items:center;gap:3px;padding:3px;border:1px solid #dae3dd;border-radius:9px;background:#f4f7f5;white-space:nowrap}
+.gep-hero-media-tab{appearance:none;display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:5px 12px;border:1px solid transparent;border-radius:7px;background:transparent;color:#65736a;font-size:11px;font-weight:750;line-height:1;cursor:pointer;transition:background .15s ease,border-color .15s ease,color .15s ease,box-shadow .15s ease}
+.gep-hero-media-tab:hover,.gep-hero-media-tab:focus-visible{background:#edf4ef;color:#245f40;outline:none}
+.gep-hero-media-tab.is-active{background:#fff;color:#126b49;border-color:#bcd2c5;box-shadow:0 2px 7px rgba(23,75,48,.06)}
+.gep-hero-media-tab .dashicons{font-size:15px;width:15px;height:15px;line-height:15px}
+.gep-hero-media-switch>.gep-admin-field{margin:0!important;padding:0!important;border:0!important;background:transparent!important}
+.gep-hero-media-switch.is-video>.gep-admin-field+.gep-admin-field{margin-top:12px!important}
+.gep-hero-media-switch.is-video>.gep-media-field:not(.gep-hero-video-field){order:2;margin-top:12px!important;padding-top:12px!important;border-top:1px dashed #dae3dd!important}
+.gep-hero-media-switch.is-video{display:flex;flex-direction:column}
+.gep-hero-media-switch.is-video>.gep-hero-media-head{order:0}
+.gep-hero-media-switch.is-video>.gep-hero-video-field{order:1;margin-top:0!important}
+.gep-hero-media-switch.is-video>.gep-hero-media-note{order:3}
+.gep-hero-media-note{display:flex;align-items:flex-start;gap:7px;margin:10px 0 0!important;padding:8px 10px;border-radius:8px;background:#eef6f0;color:#4c6457;font-size:11px;line-height:1.4}
+.gep-hero-media-note .dashicons{flex:0 0 15px;font-size:15px;width:15px;height:15px;line-height:15px;color:#2b865a}
+@media(max-width:600px){.gep-hero-media-tabs{width:100%}.gep-hero-media-tab{flex:1;justify-content:center}}
+
+/* ==========================================================================
+   v9.20.0 · Preview igual a la página
+   - Cursos sin imagen: la fila no reserva el espacio de la foto (la página
+     tampoco muestra una foto de reemplazo).
+   - Categoría sin cursos: mismo aviso que la página pública.
+   ========================================================================== */
+.gep-docencia-preview-course.has-no-image{grid-template-columns:52px minmax(0,1fr) auto!important}
+.gep-docencia-live-preview.is-device-mobile .gep-docencia-preview-course.has-no-image{grid-template-columns:minmax(0,1fr)!important}
+.gep-docencia-live-preview.is-device-mobile .gep-docencia-preview-course.has-no-image>b,
+.gep-docencia-live-preview.is-device-mobile .gep-docencia-preview-course.has-no-image>div,
+.gep-docencia-live-preview.is-device-mobile .gep-docencia-preview-course.has-no-image>em{grid-column:1}
+.gep-docencia-preview-empty{padding:12px 14px;border:1px dashed #cfdbd3;border-radius:8px;background:#f8faf8;color:#66766d;font-size:12px}
+.gep-docencia-preview-image:not(.has-image){display:none!important}
+
+/* ==========================================================================
+   v9.21.3 · Una sola barra de desplazamiento en la vista previa
+   El marco (…-device-stage) es lo único que se desplaza. El contenido de la
+   página simulada nunca tiene scroll propio: antes Servicios mostraba dos
+   barras, una dentro de la otra.
+   ========================================================================== */
+.gep-parent-preview-card [class*="-device-stage"] .gep-preview-stage{max-height:none!important;overflow:visible!important}
+
+/* v9.21.3 · Video de cabecera visible en todas las previews
+   El video va detrás del texto (z-index:-1); sin "isolation" en la cabecera
+   quedaba detrás de su propio fondo verde. Inicio, Docencia, Proyectos y
+   Publicaciones no tenían la regla (sections.css usaba otros nombres). */
+.gep-home-prev-hero,.gep-docencia-live-hero,.gep-project-live-hero,.gep-publication-live-hero{position:relative;overflow:hidden;isolation:isolate}
+
+/* v9.21.3 · Quiénes somos y Contáctanos con la misma cabecera que el resto
+   En la página pública todas las cabeceras son verde oscuro con texto blanco.
+   Estas dos previews la mostraban clara si no había imagen elegida, con otros
+   tamaños de letra, y Contáctanos además tenía otra barra de navegador. Se
+   copian las medidas de la cabecera de Servicios/Comunicaciones. La imagen o
+   el video elegidos siguen encima (estilo en línea). */
+.gep-preview-pane[data-pane="header"] .gep-live-preview,
+.gep-contact-live-page .gep-contact-live-hero{
+  min-height:155px!important;padding:34px 28px 26px!important;display:flex;flex-direction:column;justify-content:flex-end;
+  background-color:#173c2a;background-image:linear-gradient(135deg,#143927,#1f5a3b);background-size:cover;background-position:center;
+  color:#fff;border:0!important;border-radius:0!important
+}
+.gep-preview-pane[data-pane="header"] .gep-live-preview .gep-preview-eyebrow,
+.gep-contact-live-page .gep-contact-live-hero .gep-contact-live-eyebrow{
+  margin:0!important;font-size:9px!important;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#cfe5d5!important
+}
+.gep-preview-pane[data-pane="header"] .gep-live-preview h4,
+.gep-contact-live-page .gep-contact-live-hero h2{
+  margin:7px 0 6px!important;color:#fff!important;font-size:34px!important;line-height:1!important;letter-spacing:-.04em!important;max-width:100%
+}
+.gep-preview-pane[data-pane="header"] .gep-live-preview p,
+.gep-contact-live-page .gep-contact-live-hero p{
+  max-width:80%;margin:0!important;color:rgba(255,255,255,.8)!important;font-size:11px!important;line-height:1.5!important
+}
+.gep-preview-pane[data-pane="header"] .gep-live-preview .gep-preview-legend{
+  align-self:flex-start;margin-top:12px;padding:6px 10px;font-size:10px;background:rgba(255,255,255,.14);color:#e7f2ea;border:1px solid rgba(255,255,255,.22)
+}
+.gep-preview-pane[data-pane="header"] .gep-live-preview .gep-preview-directory-feature{margin:14px 0 0}
+.gep-directory-browser.is-device-mobile .gep-preview-pane[data-pane="header"] .gep-live-preview,
+.gep-contact-live-preview.is-device-mobile .gep-contact-live-page .gep-contact-live-hero{min-height:145px!important;padding:24px 17px 20px!important}
+.gep-directory-browser.is-device-mobile .gep-preview-pane[data-pane="header"] .gep-live-preview h4,
+.gep-contact-live-preview.is-device-mobile .gep-contact-live-page .gep-contact-live-hero h2{font-size:25px!important}
+.gep-directory-browser.is-device-mobile .gep-preview-pane[data-pane="header"] .gep-live-preview p,
+.gep-contact-live-preview.is-device-mobile .gep-contact-live-page .gep-contact-live-hero p{max-width:100%;font-size:11px!important}
+/* Barra del navegador de Contáctanos = la de las demás previews. */
+.gep-contact-live-toolbar{height:32px;gap:5px;padding:0 9px;color:#78847d}
+.gep-contact-live-toolbar>span{gap:5px}
+.gep-contact-live-toolbar i{width:7px;height:7px;background:#cbd5ce}
+.gep-contact-live-toolbar strong{flex:0 1 auto;text-align:left;font-size:10px;color:#4d5d53;margin-left:4px}
+.gep-contact-live-toolbar em{margin-left:auto;font-size:9px;font-weight:400;letter-spacing:0;color:#7d8981;background:none;padding:0}
+
+/* v9.23.1 · Quiénes somos: botones "Añadir un apartado" parejos y acciones dentro de cada apartado */
+.gep-add-section-bar{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px!important;padding:14px!important;align-items:stretch}
+.gep-add-section-bar .gep-toolbar-label{grid-column:1/-1;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.gep-add-section-bar .button.gep-add-section{display:flex!important;align-items:center;justify-content:flex-start;gap:12px!important;min-height:64px;height:auto;margin:0;padding:10px 14px!important;border-radius:10px!important;white-space:normal;text-align:left;line-height:1.25}
+.gep-add-section-bar .gep-add-section>.dashicons{flex:none;width:34px;height:34px;display:grid;place-items:center;font-size:20px;border-radius:9px;background:#fff;color:#1f5a3b}
+.gep-add-section-bar .gep-add-section-text{display:grid;gap:3px;min-width:0}
+.gep-add-section-bar .gep-add-section-text strong{font-size:14px;font-weight:700}
+.gep-add-section-bar .gep-add-section-text small{margin:0!important;font-size:11.5px!important;font-weight:500;color:#5f7166!important}
+@media(max-width:900px){.gep-add-section-bar{grid-template-columns:1fr}}
+.gep-section-builder .gep-section-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px dashed #d7e2db}
+.gep-section-footer-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6b7a71}
+.gep-section-builder .gep-section-footer .gep-section-actions{width:auto;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.gep-section-builder .gep-section-footer .gep-section-actions>*{flex:0 0 auto}
+.gep-section-footer .gep-duplicate-section,.gep-section-footer .gep-remove-section{display:inline-flex!important;align-items:center;gap:6px;min-height:34px;padding:0 12px!important;border-radius:8px!important;font-size:13px!important;font-weight:600!important;text-decoration:none!important;box-shadow:none!important;line-height:1}
+.gep-section-footer .gep-duplicate-section{border:1px solid #cfdcd3!important;background:#fff!important;color:#173c2a!important}
+.gep-section-footer .gep-remove-section{border:1px solid #efc9c4!important;background:#fff6f5!important;color:#b3372b!important}
+.gep-section-footer .gep-remove-section:hover{background:#fbe6e3!important;border-color:#e2a59d!important}
+.gep-section-footer .dashicons{width:16px;height:16px;font-size:16px}
+/* v9.23.1 · El texto "Mover a grupo" es solo para lectores de pantalla (se veía encima del nombre). */
+.gep-editor-wrap .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+/* v9.23.1 · Un cargo largo ya no tapa el nombre en la lista de personas. */
+.gep-directory-list-open .gep-item-summary-badge{flex:0 1 auto;max-width:45%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gep-directory-list-row>.gep-directory-list-open{min-width:0;overflow:hidden}
+.gep-directory-list-open .gep-directory-summary-copy{flex:1 1 0;min-width:72px;overflow:hidden}
+.gep-directory-list-open .gep-directory-summary-copy strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gep-directory-group-items{grid-template-columns:minmax(0,1fr)}
+/* v9.23.2 · Quiénes somos más liviano: menos cosas a la vista */
+.gep-add-section-bar{margin:14px 0 0!important}
+.gep-add-section-bar .gep-add-section-toggle{grid-column:1/-1;justify-self:start;display:inline-flex!important;align-items:center;gap:6px;min-height:38px;padding:0 14px!important;border-radius:9px!important;border:1px dashed #9fbcaa!important;background:#fff!important;color:#1f5a3b!important;font-weight:600;box-shadow:none!important}
+.gep-add-section-bar .gep-add-section-toggle:hover{border-style:solid!important;background:#f3f8f5!important}
+.gep-add-section-bar.is-collapsed{display:block!important;padding:0!important;background:transparent!important;border:0!important}
+.gep-add-section-bar.is-collapsed .gep-toolbar-label,.gep-add-section-bar.is-collapsed .gep-add-section{display:none!important}
+/* Cabecera de grupos y fichas de grupo: el botón pasa a la barra de la lista */
+.gep-directory-groups-shell .gep-directory-groups-head,.gep-directory-groups-shell .gep-directory-group-chips{display:none!important}
+.gep-directory-groups-shell{border:0!important;background:transparent!important;padding:0!important;margin:0 0 8px!important;box-shadow:none!important}
+.gep-directory-groups-shell .gep-directory-groups-manager:not(.is-hidden){border:1px solid #dbe5df;border-radius:10px;background:#f8fbf9;padding:12px}
+.gep-directory-item-toolbar{justify-content:flex-end}
+.gep-directory-item-toolbar.is-empty{display:none!important}
+.gep-section-builder:not(.has-search) .gep-directory-item-search,.gep-section-builder:not(.has-search) .gep-directory-search-count{display:none!important}
+.gep-directory-item-toolbar .gep-directory-groups-toggle{display:inline-flex!important;align-items:center;gap:5px;margin-left:auto!important;border-radius:8px!important;font-size:12px!important}
+.gep-directory-item-toolbar .gep-directory-groups-toggle .dashicons{font-size:16px;width:16px;height:16px}
+/* Sin grupos: lista simple, sin la caja "Sin grupo" */
+.gep-section-builder.is-groupless .gep-directory-group-block{border:0!important;background:transparent!important;padding:0!important;box-shadow:none!important}
+.gep-section-builder.is-groupless .gep-directory-group-head{display:none!important}
+.gep-section-builder.is-groupless .gep-directory-group-items{padding:0!important;border:0!important;background:transparent!important}
+/* Pie: ajustes del apartado (título, abierto) y acciones */
+.gep-section-builder .gep-section-footer{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.gep-section-builder .gep-section-footer .gep-section-actions{justify-self:end}
+.gep-section-builder .gep-section-footer .gep-section-footer-label{grid-column:1/-1}
+.gep-section-builder .gep-section-footer .gep-section-settings{display:grid!important;margin:0!important;grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;align-items:end}
+.gep-section-builder .gep-section-footer .gep-section-settings>label:first-child{display:block}
+.gep-section-builder .gep-section-footer .gep-section-settings input[type=text]{width:100%;display:block}
+.gep-section-builder .gep-section-footer .gep-section-settings label{font-size:12px}
+.gep-section-builder .gep-section-footer .gep-section-settings input[type=text]{min-height:36px}
+@media(max-width:900px){.gep-section-builder .gep-section-footer,.gep-section-builder .gep-section-footer .gep-section-settings{grid-template-columns:1fr}.gep-section-builder .gep-section-footer .gep-section-actions{justify-self:start}}
+/* El grupo se elige dentro de la ficha o arrastrando: sin selector en cada fila */
+.gep-directory-list-row .gep-directory-quick-move{display:none!important}
+.gep-section-builder .gep-add-item.is-hidden-by-groups{display:none!important}
+.gep-directory-group-head .gep-directory-add-to-group{white-space:nowrap;flex:none}
+.gep-directory-single-editor .gep-directory-item-remove{display:inline-flex!important;align-items:center;gap:5px;min-height:30px;padding:0 10px!important;border:1px solid #efc9c4!important;border-radius:7px!important;background:#fff6f5!important;color:#b3372b!important;font:600 12px/1 inherit!important;text-decoration:none!important;box-shadow:none!important}
+.gep-directory-single-editor .gep-directory-item-remove .dashicons{width:15px;height:15px;font-size:15px}
+/* v9.23.4 · Sin X para cerrar fichas: se cierran pulsando de nuevo el elemento */
+.gep-directory-close-editor,.gep-project-record-close,.gep-publication-close-editor,.gep-service-close[aria-label="Cerrar editor"],.gep-inline-editor-close,.gep-custom-editor-close{display:none!important}
+/* La flecha ">" apunta hacia abajo cuando el elemento está abierto */
+.gep-directory-list-arrow,.gep-project-record-arrow,.gep-publication-list-arrow{transition:transform .18s ease}
+.gep-directory-list-row.is-active .gep-directory-list-arrow,.gep-project-record-list-row.is-active .gep-project-record-arrow,.gep-publication-list-row.is-active .gep-publication-list-arrow{transform:rotate(90deg)}
+/* v9.23.5 · Botón "Carpetas de imágenes" junto a Ayuda */
+.gep-top-utility .gep-top-folders+.gep-top-help{margin-left:6px!important}
+@media(max-width:782px){.gep-top-folders{font-size:0!important;gap:0!important}.gep-top-folders .dashicons{font-size:18px!important}}

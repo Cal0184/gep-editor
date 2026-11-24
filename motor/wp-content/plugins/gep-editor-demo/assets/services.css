@@ -1,0 +1,68 @@
+/* GEP Editor · Servicios (pestaña del editor). Reutiliza la base de admin.css. */
+.gep-service-list{display:grid;gap:8px;margin-top:10px}
+.gep-service-row{border:1px solid #dfe5e1;border-radius:10px;background:#fff;transition:border-color .16s ease,box-shadow .16s ease}
+.gep-service-row.is-open{border-color:#b8d4c2;box-shadow:0 10px 28px rgba(31,90,59,.08)}
+.gep-service-row.is-invalid-row{border-color:#d63638}
+.gep-service-row-head{display:flex;align-items:center;gap:10px;min-height:52px;padding:8px 10px}
+.gep-service-row-head .gep-grip{cursor:grab;color:#8a968f}
+.gep-service-row-number{font:800 11px/1 ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em;color:#1f5a3b;background:#e8efe9;border-radius:6px;padding:6px 7px}
+.gep-service-row-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;cursor:pointer}
+.gep-service-row-title{font-size:14px;color:#15231b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gep-service-row-tag{font-size:12px;color:#68736c}
+.gep-service-row-tag:empty{display:none}
+.gep-service-row-state{font-size:11px;font-weight:700;border-radius:999px;padding:3px 9px;background:#e7f0e9;color:#1f5a3b}
+.gep-service-row.is-hidden-service .gep-service-row-state{background:#f1f1f1;color:#757575}
+.gep-service-row.is-hidden-service .gep-service-row-title{color:#757575}
+.gep-service-row.is-open .gep-service-open{background:#1f5a3b;border-color:#1f5a3b;color:#fff}
+.gep-service-row-body{border-top:1px solid #e6ebe7;padding:14px;display:grid;gap:12px;background:#fbfcfb;border-radius:0 0 10px 10px}
+.gep-service-row-body[hidden]{display:none}
+.gep-service-row-body label{display:grid;gap:5px;font-weight:600}
+.gep-service-row-body textarea{min-height:0}
+.gep-service-visible-toggle{display:flex!important;align-items:center;gap:8px!important;font-weight:600}
+.gep-service-row-done{display:flex;justify-content:flex-end}
+.gep-service-row .gep-field-error-msg{color:#b32d2e;font-weight:500}
+.gep-service-steps-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.gep-service-step-field{border:1px solid #e1e7e3;border-radius:10px;padding:10px;display:grid;gap:7px;background:#fff}
+.gep-service-step-field label{display:grid;gap:4px;font-weight:600}
+.gep-service-step-no{font:800 11px/1 ui-monospace,SFMono-Regular,monospace;color:#1f5a3b;letter-spacing:.1em}
+@media(max-width:782px){.gep-service-steps-grid{grid-template-columns:1fr}.gep-service-row-state{display:none}}
+
+/* Preview */
+/* v9.21.3: sin scroll propio; solo se desplaza el marco de la preview. */
+.gep-service-browser .gep-preview-stage{max-height:none;overflow:visible}
+.gep-service-browser .gep-hub-live-hero{position:relative;overflow:hidden;background-size:cover;background-position:center}
+.gep-service-browser .gep-hub-live-hero>*{position:relative;z-index:1}
+.gep-service-browser .gep-hub-live-hero>.gep-admin-hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.gep-service-live-list{display:grid;gap:12px}
+.gep-service-live-card{display:grid;grid-template-columns:42% 1fr;gap:12px;align-items:stretch;background:#fff;border:1px solid #dce2dc;border-radius:12px;overflow:hidden;transition:box-shadow .16s ease}
+.gep-service-live-card.is-reverse{grid-template-columns:1fr 42%}
+.gep-service-live-card.is-reverse .gep-service-live-media{order:2}
+.gep-service-live-card.is-active{box-shadow:0 0 0 2px #1f5a3b}
+.gep-service-live-media{position:relative;min-height:120px;background:linear-gradient(135deg,#173c2a,#2f6b47);background-size:cover;background-position:center;color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:10px}
+.gep-service-live-media b{font:800 22px/1 ui-monospace,SFMono-Regular,monospace;opacity:.85}
+.gep-service-live-media i{font-style:normal;font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.gep-service-live-media.has-image b,.gep-service-live-media.has-image i{display:none}
+.gep-service-live-copy{padding:10px 12px 10px 0;display:grid;gap:4px;align-content:start}
+.gep-service-live-card.is-reverse .gep-service-live-copy{padding:10px 0 10px 12px}
+.gep-service-live-copy small{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1f5a3b}
+.gep-service-live-copy strong{font-size:14px;line-height:1.2;color:#15231b}
+.gep-service-live-copy p{margin:0;font-size:11px;color:#607067}
+.gep-service-live-copy ul{margin:2px 0 0 14px;padding:0;font-size:10.5px;color:#415047}
+.gep-service-live-copy em{font-style:normal;font-size:11px;font-weight:700;color:#1f5a3b}
+.gep-service-live-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gep-service-live-step{background:#fff;border:1px solid #dce2dc;border-radius:10px;padding:9px}
+.gep-service-live-step span{font:800 10px/1 ui-monospace,SFMono-Regular,monospace;color:#1f5a3b}
+.gep-service-live-step strong{display:block;font-size:12px;margin:8px 0 3px}
+.gep-service-live-step p{margin:0;font-size:10.5px;color:#607067}
+.gep-service-live-cta{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#1f5a3b;color:#fff;padding:18px 16px}
+.gep-service-live-cta span{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
+.gep-service-live-cta strong{font-size:16px;line-height:1.15}
+.gep-service-live-cta b{background:#dff0e3;color:#163b27;border-radius:999px;padding:7px 12px;font-size:11px;white-space:nowrap}
+[data-service-live].is-live-active{outline:2px solid rgba(31,90,59,.35);outline-offset:-2px}
+.gep-service-browser.is-device-tablet .gep-service-live-steps{grid-template-columns:repeat(2,1fr)}
+.gep-service-browser.is-device-mobile .gep-service-live-card,.gep-service-browser.is-device-mobile .gep-service-live-card.is-reverse{grid-template-columns:1fr}
+.gep-service-browser.is-device-mobile .gep-service-live-card.is-reverse .gep-service-live-media{order:0}
+.gep-service-browser.is-device-mobile .gep-service-live-copy,.gep-service-browser.is-device-mobile .gep-service-live-card.is-reverse .gep-service-live-copy{padding:0 10px 10px}
+.gep-service-browser.is-device-mobile .gep-service-live-media{min-height:90px}
+.gep-service-browser.is-device-mobile .gep-service-live-steps{grid-template-columns:1fr}
+.gep-service-browser.is-device-mobile .gep-service-live-cta{flex-direction:column;align-items:flex-start}

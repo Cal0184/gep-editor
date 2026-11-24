@@ -1,0 +1,217 @@
+/* ==========================================================================
+   GEP Editor · v9.24.0 · Comodidad del editor (includes/ux.php + assets/ux.js)
+   v9.24.1: barra y vista previa fijas solo con CSS (ver bloque 1 y 3).
+   Se carga después de editor.css y dark.css. Mantiene la identidad visual:
+   mismos verdes, radios y tipografía; solo cambia cómo acompaña al usuario.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Base: los contenedores de WordPress tenían overflow-x:hidden, que convierte
+   cada uno en un "área de scroll" y anula position:sticky. clip recorta igual
+   sin crear esa área (si el navegador no lo conoce, queda como antes).
+   -------------------------------------------------------------------------- */
+body.toplevel_page_gep-content-editor #wpwrap,
+body.toplevel_page_gep-content-editor #wpcontent,
+body.toplevel_page_gep-content-editor #wpbody,
+body.toplevel_page_gep-content-editor #wpbody-content,
+body.toplevel_page_gep-content-editor .gep-editor-wrap{overflow-x:clip!important;overflow-y:visible!important}
+
+/* --------------------------------------------------------------------------
+   1 y 3 · Barra "Estado de la página" y vista previa fijas (v9.24.1)
+   SOLO CSS, con posiciones constantes. Nada depende del desplazamiento:
+   no hay JavaScript que mida, no cambia la altura de la barra al fijarse y
+   la vista previa usa un "top" fijo. Así no puede haber un ciclo
+   medir -> mover -> medir que haga parpadear la pantalla (causa del fallo
+   de la 9.24.0).
+   -------------------------------------------------------------------------- */
+:root{--gep-port-offset:0px;--gep-bar-top:54px;--gep-bar-h:84px}
+/* WordPress deja 32 px arriba para su barra; los botones Modo oscuro / Ayuda
+   ocupan hasta ~13 px dentro del área que se desplaza. */
+html.wp-toolbar{--gep-port-offset:32px}
+html.wp-toolbar body.toplevel_page_gep-content-editor{--gep-bar-top:20px}
+/* Con la barra de WordPress visible (botón WordPress), los botones bajan (v9.23.6). */
+html.wp-toolbar body.toplevel_page_gep-content-editor.gep-native-nav-open{--gep-bar-top:52px}
+
+/* Ningún ajuste automático de scroll del navegador (scroll anchoring). */
+html,body.toplevel_page_gep-content-editor{overflow-anchor:none}
+
+@media (min-width:1181px) and (min-height:560px){
+  body.toplevel_page_gep-content-editor:not(.gep-no-sticky) .gep-editor-wrap .gep-contact-commandbar{
+    position:sticky!important;top:var(--gep-bar-top)!important;z-index:60!important;
+    transition:none!important;animation:none!important
+  }
+}
+/* v9.29.1: la vista previa acompaña desde 1181 × 560 (igual que la barra).
+   Antes pedía 1281 × 700 y en notebooks (1366 × 768, o Windows al 125-150 %)
+   dejaba de bajar. Sigue siendo solo CSS con valores constantes: entre 1181 y
+   1280 la barra ocupa siempre dos líneas (138 px) y desde 1281 una (84 px). */
+@media (min-width:1181px) and (max-width:1280px) and (min-height:560px){
+  body.toplevel_page_gep-content-editor{--gep-bar-h:138px}
+}
+@media (min-width:1181px) and (min-height:560px){
+  /* La barra mide siempre lo mismo para que la vista previa pueda quedar
+     justo debajo con un valor fijo. */
+  body.toplevel_page_gep-content-editor:not(.gep-no-sticky) .gep-editor-wrap .gep-contact-commandbar{
+    height:var(--gep-bar-h)!important;min-height:var(--gep-bar-h)!important;max-height:var(--gep-bar-h)!important;
+    box-sizing:border-box!important
+  }
+  body.toplevel_page_gep-content-editor:not(.gep-no-sticky) .gep-editor-wrap .gep-preview-column{
+    position:sticky!important;top:calc(var(--gep-bar-top) + var(--gep-bar-h) + 12px)!important;align-self:start!important;
+    transition:none!important;animation:none!important
+  }
+  body.toplevel_page_gep-content-editor:not(.gep-no-sticky) .gep-editor-wrap .gep-parent-preview-card{
+    height:max(320px,calc(100vh - var(--gep-port-offset) - var(--gep-bar-top) - var(--gep-bar-h) - 36px))!important;
+    min-height:320px!important;
+    max-height:max(320px,calc(100vh - var(--gep-port-offset) - var(--gep-bar-top) - var(--gep-bar-h) - 36px))!important;
+    transition:none!important
+  }
+}
+@media (min-width:1281px) and (min-height:560px){
+  body.toplevel_page_gep-content-editor:not(.gep-no-sticky) .gep-editor-wrap .gep-contact-commandbar{flex-wrap:nowrap!important}
+}
+/* Pantallas angostas, bajas o modo sin fijar: todo vuelve a su lugar normal. */
+@media (max-width:1180px),(max-height:559px){
+  body.toplevel_page_gep-content-editor .gep-editor-wrap .gep-contact-commandbar{position:relative!important;top:auto!important}
+  body.toplevel_page_gep-content-editor .gep-editor-wrap .gep-preview-column{position:relative!important;top:auto!important}
+}
+body.gep-no-sticky .gep-editor-wrap .gep-contact-commandbar,
+body.gep-no-sticky .gep-editor-wrap .gep-preview-column{position:relative!important;top:auto!important}
+
+/* Personas sensibles al movimiento: sin desplazamientos suaves ni destellos. */
+@media (prefers-reduced-motion:reduce){
+  .gep-just-added,.gep-structure-row.gep-focus-enter{animation:none!important}
+  html,body{scroll-behavior:auto!important}
+}
+
+/* --------------------------------------------------------------------------
+   4 · Editar un apartado: modo enfoque
+   -------------------------------------------------------------------------- */
+.gep-structure-focusbar{display:none}
+.gep-structure-manager.is-focus-mode .gep-structure-focusbar{display:flex;align-items:center;gap:10px;margin:0 0 10px;min-width:0}
+.gep-structure-manager.is-focus-mode>.gep-structure-head,
+.gep-structure-manager.is-focus-mode>.gep-structure-library{display:none!important}
+.gep-structure-manager.is-focus-mode .gep-structure-row:not(.is-editing){display:none!important}
+.gep-structure-manager.is-focus-mode .gep-structure-row.is-editing{margin-top:0!important}
+.gep-structure-manager.is-focus-mode .gep-structure-row.is-editing .gep-structure-overview,
+.gep-structure-manager.is-focus-mode .gep-structure-row.is-editing .gep-inline-editor-head{display:none!important}
+.gep-structure-manager.is-focus-mode .gep-structure-row.is-editing .gep-structure-grip{visibility:hidden}
+.gep-structure-manager.is-focus-mode .gep-structure-row.is-editing>.gep-structure-summary{position:relative;background:#f4faf6}
+.gep-structure-manager.is-focus-mode .gep-structure-row.is-editing>.gep-structure-summary:after{content:"Pulsa aquí para volver a la lista";position:absolute;right:50px;top:50%;transform:translateY(-50%);font-size:10.5px;color:#6e7c74;pointer-events:none}
+.gep-structure-manager.is-focus-mode .gep-structure-row.is-editing .gep-structure-status{visibility:hidden!important}
+.gep-structure-manager.is-focus-mode .gep-structure-inline-editor{margin:0!important;border:0!important;border-radius:0!important}
+
+.gep-focus-back{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px 0 8px;border:1px solid #a9c0b3;border-radius:8px;background:#fff;color:#245f42;font-size:12px;font-weight:700;cursor:pointer}
+.gep-focus-back:hover,.gep-focus-back:focus-visible{background:#f2f8f4;border-color:#6f9c82;color:#174f35;outline:0}
+.gep-focus-back .dashicons{font-size:16px;width:16px;height:16px}
+.gep-focus-steps{display:flex;gap:6px;min-width:0;overflow-x:auto;padding:2px;scrollbar-width:thin;scroll-snap-type:x proximity}
+.gep-focus-step{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;max-width:210px;height:36px;padding:0 12px 0 5px;border:1px solid #dfe7e2;border-radius:999px;background:#fff;color:#3b4a42;font-size:12px;font-weight:600;cursor:pointer;scroll-snap-align:center}
+.gep-focus-step b{display:grid;place-items:center;flex:0 0 26px;width:26px;height:26px;border-radius:50%;background:#eaf3ed;color:#1f5a3b;font-size:11px;font-weight:800}
+.gep-focus-step span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gep-focus-step:hover{border-color:#a9c8b4;color:#1f5a3b}
+.gep-focus-step.is-active{border-color:#1f6a48;background:#1f6a48;color:#fff}
+.gep-focus-step.is-active b{background:#fff;color:#1f6a48}
+.gep-focus-step.is-disabled{opacity:.55}
+.gep-focus-step:focus-visible{outline:2px solid #4d8a64;outline-offset:1px}
+.gep-structure-row.gep-focus-enter{animation:gepFocusIn .35s ease}
+@keyframes gepFocusIn{from{opacity:.35;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (max-width:782px){
+  .gep-structure-manager.is-focus-mode .gep-structure-focusbar{flex-direction:column;align-items:stretch;gap:8px}
+  .gep-focus-back{align-self:flex-start}
+  .gep-structure-manager.is-focus-mode .gep-structure-row.is-editing>.gep-structure-summary:after{display:none}
+}
+
+/* Apartado "anclado" (Buscador va junto a Publicaciones). */
+.gep-structure-pin{display:grid!important;place-items:center;width:28px!important;height:40px!important;color:#8a9a90;font-size:16px!important;cursor:help}
+
+/* --------------------------------------------------------------------------
+   2 · Lo recién creado se resalta un momento
+   -------------------------------------------------------------------------- */
+.gep-just-added{animation:gepJustAdded 1.5s ease}
+@keyframes gepJustAdded{0%,35%{box-shadow:0 0 0 3px rgba(63,174,121,.55)}100%{box-shadow:0 0 0 0 rgba(63,174,121,0)}}
+
+/* --------------------------------------------------------------------------
+   5 · Zonas de arrastre más grandes y visibles
+   -------------------------------------------------------------------------- */
+.gep-editor-wrap :is(.gep-grip,.gep-structure-grip,.gep-section-grip,.gep-directory-group-grip,.gep-project-gallery-grip,.gep-custom-item-head>.dashicons-menu-alt2)[data-gep-handle]{
+  display:inline-grid!important;place-items:center!important;
+  width:28px!important;min-width:28px!important;height:36px!important;line-height:1!important;
+  border:1px dashed #c9d8cf!important;border-radius:8px!important;background:#f4f8f5!important;color:#5f7468!important;
+  font-size:17px!important;cursor:grab!important;touch-action:none;flex:0 0 auto;
+  transition:background .12s ease,border-color .12s ease,color .12s ease
+}
+.gep-editor-wrap :is(.gep-grip,.gep-structure-grip,.gep-section-grip,.gep-directory-group-grip,.gep-project-gallery-grip,.gep-custom-item-head>.dashicons-menu-alt2)[data-gep-handle]:before{line-height:1!important}
+.gep-editor-wrap [data-gep-handle]:hover,
+.gep-editor-wrap [data-gep-handle]:focus-visible{border-style:solid!important;border-color:#6f9c82!important;background:#e4f1e9!important;color:#1f5a3b!important;outline:0}
+.gep-editor-wrap [data-gep-handle]:active{cursor:grabbing!important}
+/* La fila de apartados: la columna de agarre ocupa toda la altura útil. */
+.gep-structure-summary .gep-structure-grip[data-gep-handle]{height:44px!important}
+
+/* Dónde se soltará */
+.gep-editor-wrap .ui-sortable-placeholder{
+  visibility:visible!important;position:relative;min-height:44px;
+  background:rgba(31,106,72,.06)!important;border:2px dashed #3f8f67!important;border-radius:10px!important;box-shadow:none!important;
+  margin:6px 0!important
+}
+.gep-editor-wrap .ui-sortable-placeholder[data-gep-drop]:after{content:attr(data-gep-drop);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#2f7a55;font-size:12px;font-weight:700;letter-spacing:.02em;pointer-events:none}
+.gep-editor-wrap .ui-sortable-helper{box-shadow:0 16px 34px rgba(16,48,32,.20)!important;opacity:.97;transform:rotate(.4deg)}
+body.gep-is-sorting,body.gep-is-sorting *{cursor:grabbing!important;user-select:none!important}
+
+/* ==========================================================================
+   Modo oscuro (mismas variables que dark.css)
+   ========================================================================== */
+body.gep-theme-dark .gep-focus-back{background:#16201c;border-color:#36473c;color:#c3e4d0}
+body.gep-theme-dark .gep-focus-back:hover,body.gep-theme-dark .gep-focus-back:focus-visible{background:#19211b;border-color:#415f4c;color:#e7efea}
+body.gep-theme-dark .gep-focus-step{background:#16201c;border-color:#2c3a34;color:#d0d9d5}
+body.gep-theme-dark .gep-focus-step b{background:#20302a;color:#9fe0bd}
+body.gep-theme-dark .gep-focus-step:hover{border-color:#415f4c;color:#e7efea}
+body.gep-theme-dark .gep-focus-step.is-active{background:#2a9a6a;border-color:#2a9a6a;color:#06241a}
+body.gep-theme-dark .gep-focus-step.is-active b{background:#06241a;color:#9fe0bd}
+body.gep-theme-dark .gep-structure-manager.is-focus-mode .gep-structure-row.is-editing>.gep-structure-summary{background:#19231e}
+body.gep-theme-dark .gep-structure-manager.is-focus-mode .gep-structure-row.is-editing>.gep-structure-summary:after{color:#9aaca2}
+body.gep-theme-dark .gep-editor-wrap [data-gep-handle]{background:#19231e!important;border-color:#36473c!important;color:#9aaca2!important}
+body.gep-theme-dark .gep-editor-wrap [data-gep-handle]:hover,body.gep-theme-dark .gep-editor-wrap [data-gep-handle]:focus-visible{background:#20302a!important;border-color:#3fae79!important;color:#e7efea!important}
+body.gep-theme-dark .gep-editor-wrap .ui-sortable-placeholder{background:rgba(63,174,121,.08)!important;border-color:#3fae79!important}
+body.gep-theme-dark .gep-editor-wrap .ui-sortable-placeholder[data-gep-drop]:after{color:#9fe0bd}
+body.gep-theme-dark .gep-structure-pin{color:#9aaca2}
+
+/* Publicaciones: Buscador como bloque propio en la vista previa. */
+.gep-publication-live-body.gep-publication-live-stats{padding-bottom:0!important}
+.gep-publication-live-body.gep-publication-live-search{padding-top:0!important;padding-bottom:0!important}
+.gep-publication-live-body.gep-publication-live-records{padding-top:0!important}
+.gep-publication-live-preview:not(.gep-structure-general-preview) .gep-publication-live-search{padding-top:18px!important}
+.gep-publication-live-preview .gep-publication-live-search .gep-publication-preview-tools{margin-bottom:15px}
+
+/* v9.25.0 · Teléfonos: la barra de pestañas va abajo a lo ancho (reglas de
+   1180px/1450px la dejaban de 16px a la izquierda) y "Sitio público" queda
+   como el último botón de esa barra, porque es el único acceso a la página
+   publicada desde que se quitó "Ver página real" de la barra de estado. */
+@media(max-width:782px){
+  body.toplevel_page_gep-content-editor .gep-page-tabs{top:auto!important;bottom:0!important;width:100%!important;padding:6px 7px!important;overflow-x:auto!important;overscroll-behavior-x:contain}
+  body.toplevel_page_gep-content-editor .gep-page-tabs .gep-sidebar-public{display:flex!important;position:static!important;flex:1 0 52px!important;min-width:52px!important;width:auto!important;height:48px!important;min-height:48px!important;margin:0!important;padding:0!important;align-items:center!important;justify-content:center!important;border-radius:8px!important}
+  body.toplevel_page_gep-content-editor .gep-page-tabs .gep-sidebar-public>span:last-child{display:none!important}
+}
+
+/* v9.25.0 · Inicio: la nota informativa vacía dejaba una franja (negra en modo
+   oscuro) bajo "Herramientas y datos" en la vista previa. Como en la página
+   pública, si no hay nota no se muestra nada. */
+.gep-home-prev-note.is-empty,.gep-home-prev-note:empty{display:none!important}
+
+/* v9.25.0 · Encuadre de «Mensaje de paisaje» (assets/landscape-frame.js). */
+.gep-landscape-frame{margin-top:14px}
+.gep-landscape-picker{position:relative;display:table;max-width:min(420px,100%);margin:8px 0 10px;border:1px solid #dce5df;border-radius:10px;overflow:hidden;background:#eef3ef;cursor:crosshair;touch-action:none;line-height:0}
+.gep-landscape-picker img{display:block;width:auto;max-width:100%;height:auto;max-height:280px;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.gep-landscape-picker:focus-visible{outline:2px solid #1f7a52;outline-offset:2px}
+.gep-landscape-dot{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border:3px solid #fff;border-radius:50%;background:rgba(31,122,82,.85);box-shadow:0 0 0 1px rgba(0,0,0,.35),0 3px 10px rgba(0,0,0,.3);pointer-events:none;z-index:2}
+.gep-landscape-crop{position:absolute;border:2px solid rgba(255,255,255,.95);box-shadow:0 0 0 999px rgba(9,25,15,.42);border-radius:4px;pointer-events:none;z-index:1}
+.gep-landscape-frame-row{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px}
+.gep-landscape-frame-row label{display:grid;gap:5px;flex:1 1 260px;font-weight:650}
+.gep-landscape-frame-row select{max-width:none;width:100%}
+.gep-landscape-frame-row .button{display:inline-flex;align-items:center;gap:6px}
+.gep-landscape-hint{display:block;margin-top:8px;color:#6e7c74;font-size:11.5px;line-height:1.45}
+body.gep-theme-dark .gep-landscape-picker{border-color:#35483b;background:#19211c}
+body.gep-theme-dark .gep-landscape-hint{color:#9aaca2}
+/* Vista previa: misma forma que la página pública. */
+#gep-home-live-preview .gep-home-prev-landscape.is-photo-fit{display:flex;flex-direction:column;justify-content:center;min-height:130px;max-height:420px}
+#gep-home-live-preview .gep-home-prev-landscape.is-photo-tall{position:relative;isolation:isolate;overflow:hidden;background:#10271b!important}
+#gep-home-live-preview .gep-home-prev-landscape.is-photo-tall::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(rgba(9,25,15,.1),rgba(9,25,15,.5)),var(--gep-landscape-img) center/contain no-repeat}
+#gep-home-live-preview .gep-home-prev-landscape.is-photo-tall::after{content:"";position:absolute;inset:-30px;z-index:-2;background:var(--gep-landscape-img) center/cover no-repeat;filter:blur(18px) brightness(.72)}

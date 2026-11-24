@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Imagen referencial de integrante de equipo">
+<rect width="800" height="1000" fill="#dce8e5"/>
+<g opacity=".35" stroke="#2e6456" fill="none"><path d="M-40 210 C140 80 260 330 440 170 S760 170 850 60"/><path d="M-60 270 C130 130 290 390 470 230 S760 220 880 115"/><path d="M-30 790 C190 620 300 860 510 700 S760 680 850 570"/></g>
+<g opacity=".22" stroke="#2e6456"><path d="M0 120H800M0 240H800M0 360H800M0 480H800M0 600H800M0 720H800M0 840H800"/><path d="M100 0V1000M220 0V1000M340 0V1000M460 0V1000M580 0V1000M700 0V1000"/></g>
+<circle cx="400" cy="365" r="128" fill="#92b3aa"/>
+<path d="M164 892c20-190 118-312 236-312s216 122 236 312" fill="#2e6456" opacity=".80"/>
+<path d="M285 396c35 42 77 62 115 62 44 0 83-19 117-57" stroke="#2e6456" stroke-width="11" fill="none" opacity=".38"/>
+<circle cx="400" cy="365" r="166" fill="none" stroke="#2e6456" stroke-width="3" opacity=".35"/>
+<text x="58" y="82" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="5" fill="#2e6456" opacity=".72">GEP · EQUIPO</text>
+<text x="58" y="950" font-family="Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="4" fill="#2e6456" opacity=".55">IMAGEN REFERENCIAL</text>
+</svg>

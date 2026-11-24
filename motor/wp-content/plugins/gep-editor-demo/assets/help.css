@@ -1,0 +1,306 @@
+/* GEP Editor · Ayuda visual y ayuda contextual (includes/help.php + assets/help.js) */
+.gep-ayuda,.gep-hp,.gep-hq-pop,.gep-tour-card{
+  --gh-deep:#173f2e;--gh-deep2:#1f5540;--gh-accent:#1f5c43;--gh-accent-soft:#e4f1e9;
+  --gh-ink:#18231e;--gh-muted:#66736c;--gh-line:#e1e9e4;--gh-soft:#f5f9f6;--gh-card:#ffffff;
+  --gh-mint:#e8f3ec;--gh-mint2:#d7eadf;--gh-on-deep:#e6f1eb;--gh-on-deep-muted:#a9cbb8;--gh-ring:#f2c14e;
+}
+
+/* ---------- Página Ayuda: menú lateral + contenido ---------- */
+.gep-ayuda{display:grid;grid-template-columns:236px minmax(0,1fr);gap:22px;align-items:start;max-width:1380px;margin:18px 20px 40px 0;color:var(--gh-ink);font-size:13px}
+.gep-ayuda *{box-sizing:border-box}
+.gep-ayuda-ico{width:20px;height:20px;flex:0 0 auto;display:block}
+.gep-ayuda h1,.gep-ayuda h2{color:var(--gh-ink);text-wrap:balance}
+
+.gep-ayuda-side{min-width:0;position:sticky;top:46px;display:grid;gap:18px;padding:18px 14px;background:var(--gh-soft);border:1px solid var(--gh-line);border-radius:16px;max-height:calc(100vh - 64px);overflow:auto}
+.gep-ayuda-brand{display:flex;align-items:center;gap:10px;padding:2px 4px}
+.gep-ayuda-brand strong{font-size:16px;letter-spacing:-.01em}
+.gep-ayuda-brand-mark{width:38px;height:38px;border-radius:10px;background:var(--gh-deep2);color:#fff;display:grid;place-items:center}
+.gep-ayuda-pill{margin-left:auto;font-size:11px;font-weight:600;color:var(--gh-deep2);background:var(--gh-mint);border-radius:999px;padding:3px 8px}
+.gep-ayuda-nav{display:grid;gap:3px;min-width:0}
+.gep-ayuda-nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:9px;color:#3b4842;text-decoration:none;font-size:14px;font-weight:500;border-left:3px solid transparent}
+.gep-ayuda-nav a .gep-ayuda-ico{color:#56645d}
+.gep-ayuda-nav a:hover{background:#eef5f1;color:var(--gh-deep)}
+.gep-ayuda-nav a:focus-visible{outline:2px solid var(--gh-accent);outline-offset:1px;box-shadow:none}
+.gep-ayuda-nav a.is-active{background:var(--gh-mint);color:var(--gh-deep);font-weight:700;border-left-color:var(--gh-deep2)}
+.gep-ayuda-nav a.is-active .gep-ayuda-ico{color:var(--gh-deep2)}
+.gep-ayuda-support{display:grid;gap:8px;padding:14px;background:#fff;border:1px solid var(--gh-line);border-radius:12px}
+.gep-ayuda-support-copy{display:flex;gap:10px;align-items:flex-start}
+.gep-ayuda-support-copy strong{display:block;font-size:13px;margin-bottom:2px}
+.gep-ayuda-support-copy span{color:var(--gh-muted);font-size:12px;line-height:1.4}
+
+/* Botones */
+.gep-ayuda-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:0 20px;border-radius:9px;font-size:15px;font-weight:600;text-decoration:none;border:1.5px solid var(--gh-deep2);cursor:pointer;transition:background .15s,color .15s}
+.gep-ayuda-btn.is-primary{background:var(--gh-deep2);color:#fff}
+.gep-ayuda-btn.is-primary:hover,.gep-ayuda-btn.is-primary:focus{background:var(--gh-deep);color:#fff}
+.gep-ayuda-btn.is-ghost{background:#fff;color:var(--gh-deep)}
+.gep-ayuda-btn.is-ghost:hover,.gep-ayuda-btn.is-ghost:focus{background:var(--gh-mint);color:var(--gh-deep)}
+.gep-ayuda-btn.is-small{min-height:36px;padding:0 12px;font-size:13px;border-width:1px;border-color:#cfdcd4}
+.gep-ayuda-btn.is-small .gep-ayuda-ico{width:16px;height:16px}
+.gep-ayuda-btn:focus-visible,.gep-ayuda-link:focus-visible{outline:2px solid var(--ring,#f2c14e);outline-offset:2px;box-shadow:none}
+
+/* Cabecera */
+.gep-ayuda-main{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;min-width:0}
+.gep-ayuda-hero{position:relative;overflow:hidden;display:grid;gap:18px;padding:28px 30px 30px;border-radius:18px;background:linear-gradient(120deg,#f6fbf8 0%,#ecf6f0 55%,#e2f0e7 100%);border:1px solid #deebe3}
+.gep-ayuda-hero:after{content:"";position:absolute;width:300px;height:300px;right:-90px;top:-120px;border-radius:50%;background:rgba(255,255,255,.55);pointer-events:none}
+.gep-ayuda-hero-row{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.gep-ayuda-kicker{display:block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#2f4a3d;margin-bottom:8px}
+.gep-ayuda-hero h1{margin:0 0 6px;padding:0;font-size:42px;line-height:1.05;font-weight:700;letter-spacing:-.025em}
+.gep-ayuda-hero p{margin:0;color:#4f5d56;font-size:16px}
+.gep-ayuda-hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.gep-ayuda-search{position:relative;z-index:1;display:flex;align-items:center;gap:10px;max-width:880px;background:#fff;border:1px solid #d9e3dd;border-radius:10px;padding:0 10px 0 16px;box-shadow:0 2px 8px rgba(23,63,46,.04)}
+.gep-ayuda-search:focus-within{border-color:var(--gh-deep2);box-shadow:0 0 0 3px var(--gh-mint)}
+.gep-ayuda-search>.gep-ayuda-ico{color:#4a5751}
+.gep-ayuda-search input[type=search]{flex:1;min-width:0;border:0!important;box-shadow:none!important;background:transparent!important;font-size:15px;min-height:50px;padding:0;color:var(--gh-ink)}
+.gep-ayuda-search input::placeholder{color:#86928b}
+.gep-ayuda-kbd-hint{font-family:inherit;font-size:12px;color:#5d6a63;background:#fff;border:1px solid #d9e3dd;border-radius:6px;padding:3px 8px;white-space:nowrap}
+.gep-ayuda-noresults{position:relative;z-index:1;margin:-6px 0 0!important;font-size:14px!important}
+
+/* Tarjetas de sección */
+.gep-ayuda-card{background:var(--gh-card);border:1px solid var(--gh-line);border-radius:16px;padding:22px 24px 24px;display:grid;grid-template-columns:minmax(0,1fr);gap:18px;scroll-margin-top:48px}
+.gep-ayuda-card[hidden]{display:none}
+.gep-ayuda-head{display:flex;gap:16px;align-items:center;min-width:0}.gep-ayuda-head>div{min-width:0}
+.gep-ayuda-head h2{margin:0 0 3px;font-size:21px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
+.gep-ayuda-head p{margin:0;color:var(--gh-muted);font-size:14px}
+.gep-ayuda-head-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.gep-ayuda-tile{width:52px;height:52px;border-radius:12px;background:var(--gh-mint);color:var(--gh-deep2);display:grid;place-items:center;flex:0 0 auto}
+.gep-ayuda-tile .gep-ayuda-ico{width:24px;height:24px}
+.gep-ayuda-tile.is-lg{width:58px;height:52px}
+.gep-ayuda-tile.is-solid{background:var(--gh-deep2);color:#fff}
+.gep-ayuda-tile.is-sm{width:40px;height:40px;border-radius:10px}
+.gep-ayuda-tile.is-sm .gep-ayuda-ico{width:20px;height:20px}
+
+/* Pasos con flechas */
+.gep-ayuda-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:40px}
+.gep-ayuda-steps li{position:relative;margin:0;display:grid;grid-template-columns:44px 1fr;grid-template-rows:auto auto auto;column-gap:16px;row-gap:4px;align-content:start;padding:16px 16px 18px;border:1px solid var(--gh-line);border-radius:12px;background:#fff;min-height:146px}
+.gep-ayuda-steps li[hidden]{display:none}
+.gep-ayuda-num{grid-row:1/3;width:36px;height:36px;border-radius:50%;background:var(--gh-deep2);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px}
+.gep-ayuda-round{width:46px;height:46px;border-radius:50%;background:var(--gh-mint);color:var(--gh-deep2);display:grid;place-items:center;margin-bottom:6px}
+.gep-ayuda-steps strong{grid-column:2;font-size:15px}
+.gep-ayuda-steps small{grid-column:2;color:var(--gh-muted);font-size:13px;line-height:1.4}
+.gep-ayuda-steps li+li:before{content:"";position:absolute;left:-34px;top:50%;width:28px;height:28px;margin-top:-14px;border-radius:50%;border:1px solid #cfdad3;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2318231e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center/14px no-repeat}
+.gep-ayuda-steps.is-flow li{min-height:0}
+
+/* Rejillas */
+.gep-ayuda-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.gep-ayuda-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.gep-ayuda-ctrl{display:flex;gap:18px;align-items:center;padding:14px 16px;border:1px solid var(--gh-line);border-radius:12px;background:#fff}
+.gep-ayuda-ctrl[hidden]{display:none}
+.gep-ayuda-ctrl strong{display:block;font-size:14px;margin-bottom:3px}
+.gep-ayuda-ctrl small{display:block;color:var(--gh-muted);font-size:13px;line-height:1.4}
+.gep-ayuda-ctrl.is-compact{gap:14px;padding:12px 14px}
+.gep-ayuda-devices{display:flex;gap:6px;flex:0 0 auto}
+.gep-ayuda-devices span{width:34px;height:40px;border-radius:9px;background:var(--gh-mint);color:var(--gh-deep2);display:grid;place-items:center}
+.gep-ayuda-devices .gep-ayuda-ico{width:18px;height:18px}
+
+/* Filas de acciones frecuentes */
+.gep-ayuda-grid3.is-rows{gap:8px 12px}
+.gep-ayuda-row{display:flex;align-items:center;gap:14px;width:100%;padding:8px 14px 8px 10px;border:1px solid var(--gh-line);border-radius:10px;background:#fff;color:var(--gh-ink);text-decoration:none;text-align:left;font:inherit;cursor:pointer;transition:border-color .15s,background .15s}
+.gep-ayuda-row[hidden]{display:none}
+.gep-ayuda-row:hover,.gep-ayuda-row:focus{border-color:#b9d3c3;background:#f8fbf9;color:var(--gh-ink)}
+.gep-ayuda-row:focus-visible{outline:2px solid var(--gh-accent);outline-offset:1px;box-shadow:none}
+.gep-ayuda-row-copy{flex:1;min-width:0}
+.gep-ayuda-row-copy strong{display:block;font-size:13px;font-weight:600}
+.gep-ayuda-row-copy small{display:block;color:var(--gh-muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gep-ayuda-row>.gep-ayuda-ico:last-child{width:18px;height:18px;color:#45524b}
+
+/* Nota del historial */
+.gep-ayuda-note{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;border-radius:12px;background:var(--gh-mint);color:#24453a;font-size:13px}
+.gep-ayuda-note>span{flex:1;min-width:200px}
+.gep-ayuda-link{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:var(--gh-deep2);font:inherit;font-weight:700;cursor:pointer;padding:4px 2px}
+.gep-ayuda-link .gep-ayuda-ico{width:18px;height:18px}
+
+/* Dudas rápidas */
+.gep-ayuda-fixes{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.gep-ayuda-fixes li{margin:0;display:grid;gap:4px;padding:12px 14px;border:1px solid var(--gh-line);border-radius:12px;background:#fff}
+.gep-ayuda-fixes li[hidden]{display:none}
+.gep-ayuda-fixes span{color:var(--gh-muted)}
+.gep-ayuda-fixes strong{display:flex;gap:6px;align-items:center;font-size:13px}
+.gep-ayuda-fixes strong .gep-ayuda-ico{width:16px;height:16px;color:var(--gh-deep2)}
+
+/* Atajos */
+.gep-ayuda-keys{list-style:none;margin:0;padding:0;display:grid;gap:0;border:1px solid var(--gh-line);border-radius:12px;overflow:hidden}
+.gep-ayuda-keys li{margin:0;display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;padding:11px 16px;font-size:14px}
+.gep-ayuda-keys li+li{border-top:1px solid var(--gh-line)}
+.gep-ayuda-keys li[hidden]{display:none}
+.gep-ayuda-keycaps{display:flex;align-items:center;gap:5px}
+.gep-ayuda-keycaps i{font-style:normal;color:var(--gh-muted)}
+.gep-ayuda kbd{font-family:inherit;font-size:12px;font-weight:600;min-width:28px;text-align:center;padding:4px 8px;border:1px solid #cfdad3;border-bottom-width:2px;border-radius:6px;background:#fff;color:var(--gh-ink)}
+
+.gep-ayuda-version{margin:0;text-align:right;color:var(--gh-muted);font-size:11px;font-weight:700}
+
+/* Tutoriales */
+.gep-ayuda-tuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.gep-ayuda-tut{display:grid;gap:10px;text-align:left;background:#fff;border:1px solid var(--gh-line);border-radius:12px;padding:10px;cursor:pointer;font:inherit;color:inherit}
+.gep-ayuda-tut:hover,.gep-ayuda-tut:focus-visible{border-color:#b9d3c3;outline:none;box-shadow:0 0 0 3px var(--gh-mint)}
+.gep-ayuda-tut[hidden]{display:none}
+.gep-ayuda-tut-meta{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:0 4px 2px}
+.gep-ayuda-tut-meta strong{font-size:14px}
+.gep-ayuda-tut-meta small{color:var(--gh-muted);font-size:12px;white-space:nowrap}
+
+/* Mapa plegable */
+.gep-ayuda-map-wrap{border:1px solid var(--gh-line);border-radius:12px;background:var(--gh-soft)}
+.gep-ayuda-map-wrap[hidden]{display:none}
+.gep-ayuda-map-wrap summary{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;font-weight:600;font-size:14px;list-style:none;color:var(--gh-deep)}
+.gep-ayuda-map-wrap summary::-webkit-details-marker{display:none}
+.gep-ayuda-map-wrap summary .gep-ayuda-ico:last-child{margin-left:auto;width:18px;height:18px;transition:transform .2s}
+.gep-ayuda-map-wrap[open] summary .gep-ayuda-ico:last-child{transform:rotate(90deg)}
+.gep-ayuda-map-wrap .gep-ayuda-map{padding:0 14px 14px}
+/* Miniatura: esquema del editor + punto que late en la zona del primer paso */
+.gep-ayuda-thumb{position:relative;display:block;height:80px;border-radius:8px;background:#fff;border:1px solid var(--gh-line);overflow:hidden}
+.gep-ayuda-thumb i{position:absolute;left:6%;width:32%;height:11%;border-radius:3px;background:var(--gh-line)}
+.gep-ayuda-thumb i:nth-child(1){top:22%}.gep-ayuda-thumb i:nth-child(2){top:38%}.gep-ayuda-thumb i:nth-child(3){top:54%}.gep-ayuda-thumb i:nth-child(4){top:70%;background:transparent;border:1px dashed var(--gh-accent)}
+.gep-ayuda-thumb b{position:absolute;left:42%;right:6%;top:22%;bottom:22%;border-radius:5px;background:linear-gradient(160deg,var(--gh-deep2),var(--gh-deep));opacity:.85}
+.gep-ayuda-thumb em{position:absolute;width:14px;height:14px;border-radius:50%;border:2px solid var(--gh-ring);animation:gep-help-pulse 1.8s ease-in-out infinite}
+.gep-ayuda-thumb[data-zone=tabs] em{left:12%;top:4%}
+.gep-ayuda-thumb[data-zone=list] em,.gep-ayuda-thumb[data-zone=list2] em{left:18%;top:26%}
+.gep-ayuda-thumb[data-zone=field] em{left:18%;top:42%}
+.gep-ayuda-thumb[data-zone=add] em{left:18%;top:68%}
+.gep-ayuda-thumb[data-zone=prev] em{left:68%;top:42%}
+.gep-ayuda-thumb[data-zone=dev] em{left:84%;top:4%}
+.gep-ayuda-thumb[data-zone=save] em{left:84%;top:80%}
+@keyframes gep-help-pulse{0%,100%{transform:scale(.8);opacity:.95}50%{transform:scale(1.3);opacity:.35}}
+.gep-ayuda-empty{margin:0;color:var(--gh-muted)}
+
+/* Mapa del editor */
+.gep-ayuda-map{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px;align-items:start}
+.gep-ayuda-map-ui{position:relative;background:var(--gh-soft);border:1px solid var(--gh-line);border-radius:12px;padding:12px;display:grid;gap:10px}
+.gep-ayuda-map-top{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding-left:26px}
+.gep-ayuda-map-top span{font-size:12px;padding:4px 8px;border-radius:6px;background:#fff;color:var(--gh-muted)}
+.gep-ayuda-map-top span.is-on{background:var(--gh-accent-soft);color:var(--gh-accent);font-weight:700}
+.gep-ayuda-map-top em{margin-left:auto;font-style:normal;font-size:12px;font-weight:700;background:var(--gh-accent);color:#fff;border-radius:7px;padding:6px 10px}
+.gep-ayuda-map-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:10px}
+.gep-ayuda-map-list{display:grid;gap:5px;align-content:start;padding-top:2px}
+.gep-ayuda-map-list i{font-style:normal;font-size:12px;padding:7px 8px;border:1px solid var(--gh-line);border-radius:7px;background:#fff}
+.gep-ayuda-map-list i.is-add{border-style:dashed;background:transparent;color:var(--gh-accent);font-weight:700}
+.gep-ayuda-map-prev{border:1px solid var(--gh-line);border-radius:8px;background:#fff;display:grid}
+.gep-ayuda-map-prev span{display:flex;gap:3px;padding:6px;border-bottom:1px solid var(--gh-line)}
+.gep-ayuda-map-prev b{font-weight:500;font-size:11px;padding:2px 6px;border:1px solid var(--gh-line);border-radius:5px;color:var(--gh-muted)}
+.gep-ayuda-map-prev b.is-on{color:var(--gh-accent);border-color:var(--gh-accent)}
+.gep-ayuda-map-prev i{display:block;min-height:96px;margin:8px;border-radius:6px;background:linear-gradient(160deg,var(--gh-deep2),var(--gh-deep))}
+.gep-ayuda-hot{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--gh-ring);color:var(--gh-ink);font-size:12px;font-weight:800;display:grid;place-items:center;border:0;padding:0;cursor:pointer;box-shadow:0 0 0 4px rgba(242,193,78,.3)}
+.gep-ayuda-hot.is-on{box-shadow:0 0 0 7px rgba(242,193,78,.55)}
+.gep-ayuda-hot[data-zone=tabs]{left:8px;top:13px}
+.gep-ayuda-hot[data-zone=save]{right:4px;top:-8px}
+.gep-ayuda-hot[data-zone=list]{left:calc(42% - 30px);top:56px}
+.gep-ayuda-hot[data-zone=add]{left:calc(42% - 30px);bottom:44px}
+.gep-ayuda-hot[data-zone=dev]{right:20px;top:50px}
+.gep-ayuda-legend{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.gep-ayuda-legend li{margin:0}
+.gep-ayuda-legend button{width:100%;display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:start;text-align:left;padding:7px 9px;border-radius:9px;border:1px solid transparent;background:transparent;font:inherit;font-size:13px;color:var(--gh-ink);cursor:pointer}
+.gep-ayuda-legend li.is-on button{border-color:var(--gh-line);background:var(--gh-soft)}
+.gep-ayuda-legend button:focus-visible{outline:2px solid var(--gh-accent)}
+.gep-ayuda-legend b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--gh-ring);font-size:11px}
+
+
+/* ---------- Reproductor de tutorial (Ayuda y editor) ---------- */
+.gep-hp{position:fixed;inset:0;z-index:100100;background:rgba(5,20,15,.55);display:grid;place-items:center;padding:16px}
+.gep-hp[hidden]{display:none}
+.gep-hp *{box-sizing:border-box}
+.gep-hp-box{width:min(620px,100%);background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.35);color:var(--gh-ink)}
+.gep-hp-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--gh-line)}
+.gep-hp-head strong{font-size:16px}
+.gep-hp-x{border:0;background:transparent;color:var(--gh-muted);font-size:24px;line-height:1;cursor:pointer;padding:2px 8px;border-radius:6px}
+.gep-hp-x:focus-visible{outline:2px solid var(--gh-accent)}
+.gep-hp-stage{position:relative;height:220px;margin:14px 16px 0;border-radius:10px;background:var(--gh-soft);border:1px solid var(--gh-line);overflow:hidden}
+.gep-hp-stage>i{position:absolute;display:block;border-radius:6px}
+.gep-hp-tabs{left:2%;top:3%;width:40%;height:10%;background:repeating-linear-gradient(90deg,var(--gh-line) 0 22%,transparent 22% 25%)}
+.gep-hp-dev{left:82%;top:3%;width:16%;height:10%;background:repeating-linear-gradient(90deg,var(--gh-line) 0 30%,transparent 30% 35%)}
+.gep-hp-list{left:2%;top:15%;width:36%;height:52%;background:repeating-linear-gradient(180deg,#fff 0 20%,transparent 20% 25%)}
+.gep-hp-prev{left:40%;top:15%;width:58%;height:66%;background:linear-gradient(160deg,var(--gh-deep2),var(--gh-deep))}
+.gep-hp-add{left:2%;top:84%;width:18%;height:12%;border:1px dashed var(--gh-accent)}
+.gep-hp-save{left:74%;top:84%;width:24%;height:12%;background:var(--gh-accent)}
+.gep-hp-target{position:absolute;border:3px solid var(--gh-ring);border-radius:9px;box-shadow:0 0 0 999px rgba(5,20,15,.28);transition:all .45s cubic-bezier(.2,.8,.2,1)}
+.gep-hp-cursor{position:absolute;width:18px;height:18px;transition:all .55s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
+.gep-hp-text{padding:14px 16px 4px;display:grid;gap:4px;min-height:76px}
+.gep-hp-text small{color:var(--gh-accent);font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.gep-hp-text p{margin:0;font-size:16px;line-height:1.45}
+.gep-hp-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px 16px}
+.gep-hp-dots{display:flex;gap:5px}
+.gep-hp-dots i{width:8px;height:8px;border-radius:50%;background:var(--gh-line)}
+.gep-hp-dots i.is-on{background:var(--gh-accent)}
+.gep-hp-btns{display:flex;gap:6px}
+.gep-hp .button-primary{background:var(--gh-accent);border-color:var(--gh-accent)}
+
+/* ---------- Botón ? en cada apartado del editor ---------- */
+.gep-hq-btn{margin-left:auto;flex:0 0 auto;align-self:center;width:24px;height:24px;border-radius:50%;border:1px solid #9fc7b1;background:transparent;color:#08764f;font-weight:800;font-size:12px;line-height:1;cursor:pointer;padding:0}
+.gep-hq-btn:hover,.gep-hq-btn[aria-expanded=true]{background:#08764f;border-color:#08764f;color:#fff}
+.gep-hq-btn:focus-visible{outline:2px solid #f2c14e;outline-offset:2px}
+.gep-hq-pop{position:fixed;left:0;top:0;z-index:100040;width:min(300px,86vw);background:var(--gh-deep);color:var(--gh-on-deep);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.45;box-shadow:0 16px 40px rgba(7,59,49,.28);display:grid;gap:8px}
+.gep-hq-pop[hidden]{display:none}
+.gep-hq-pop strong{color:#fff;font-size:13px}
+.gep-hq-pop ol{margin:0;padding-left:18px;display:grid;gap:2px}
+.gep-hq-pop ol li{margin:0}
+.gep-hq-play{justify-self:start;border:0;background:transparent;color:var(--gh-ring);font:inherit;font-weight:700;cursor:pointer;padding:0}
+.gep-hq-play:focus-visible{outline:2px solid var(--gh-ring)}
+
+/* ---------- Recorrido de bienvenida ---------- */
+.gep-tour-ring{position:absolute;z-index:100050;border:3px solid #f2c14e;border-radius:10px;box-shadow:0 0 0 9999px rgba(5,20,15,.35);pointer-events:none;transition:all .35s cubic-bezier(.2,.8,.2,1)}
+.gep-tour-card{position:absolute;z-index:100060;width:min(300px,calc(100vw - 32px));background:var(--gh-deep);color:var(--gh-on-deep);border-radius:12px;padding:14px;display:grid;gap:8px;font-size:13px;line-height:1.45;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.gep-tour-card strong{color:#fff;font-size:14px}
+.gep-tour-card p{margin:0}
+.gep-tour-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.gep-tour-skip{border:0;background:transparent;color:var(--gh-on-deep-muted);font:inherit;font-size:12px;cursor:pointer;padding:4px 0;text-decoration:underline}
+.gep-tour-next{border:0;border-radius:7px;background:#fff;color:var(--gh-deep2);font:inherit;font-weight:700;font-size:12px;padding:6px 12px;cursor:pointer}
+.gep-tour-next:focus-visible,.gep-tour-skip:focus-visible{outline:2px solid #f2c14e;outline-offset:2px}
+
+
+/* ---------- Responsive ---------- */
+@media (max-width:1280px){
+  .gep-ayuda-steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .gep-ayuda-steps li+li:before{display:none}
+}
+@media (max-width:1100px){
+  .gep-ayuda{grid-template-columns:minmax(0,1fr);gap:14px}
+  .gep-ayuda-side{position:sticky;top:32px;z-index:5;grid-template-columns:1fr;gap:10px;padding:10px;max-height:none;overflow:visible}
+  .gep-ayuda-brand,.gep-ayuda-support{display:none}
+  .gep-ayuda-nav{display:flex;overflow-x:auto;gap:4px;scrollbar-width:thin}
+  .gep-ayuda-nav a{flex:0 0 auto;padding:8px 12px;border-left:0;font-size:13px}
+  .gep-ayuda-grid3,.gep-ayuda-tuts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gep-ayuda-map{grid-template-columns:1fr}
+}
+@media (max-width:782px){
+  .gep-ayuda{margin:10px 10px 32px 0}
+  .gep-ayuda-side{top:46px}
+  .gep-ayuda-hero{padding:20px}
+  .gep-ayuda-hero h1{font-size:32px}
+  .gep-ayuda-hero-actions,.gep-ayuda-hero-actions .gep-ayuda-btn{width:100%}
+  .gep-ayuda-kbd-hint{display:none}
+  .gep-ayuda-card{padding:18px 16px}
+  .gep-ayuda-tile{width:44px;height:44px}
+  .gep-ayuda-grid2,.gep-ayuda-fixes{grid-template-columns:minmax(0,1fr)}
+  .gep-ayuda-hot[data-zone=dev]{display:none}
+  .gep-hp-stage{height:180px}
+}
+@media (max-width:600px){
+  .gep-ayuda-steps,.gep-ayuda-grid3,.gep-ayuda-tuts{grid-template-columns:minmax(0,1fr)}
+  .gep-ayuda-steps li{min-height:0}
+  .gep-ayuda-keys li{grid-template-columns:1fr;gap:6px}
+  .gep-ayuda-map-ui{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .gep-ayuda-thumb em{animation:none}
+  .gep-hp-target,.gep-hp-cursor,.gep-tour-ring,.gep-ayuda-map-wrap summary .gep-ayuda-ico{transition:none}
+}
+
+/* ---------- v9.24.0 · Correo de soporte configurable ---------- */
+.gep-ayuda-support-email{display:block;margin-top:-3px;color:var(--gh-muted);font-size:11.5px;line-height:1.35;word-break:break-all;text-align:center}
+.gep-ayuda-support-msg{margin:0;padding:8px 10px;border-radius:8px;font-size:12px;line-height:1.4}
+.gep-ayuda-support-msg.is-ok{background:var(--gh-mint);color:var(--gh-deep)}
+.gep-ayuda-support-msg.is-error{background:#fdecec;color:#9b1c1c}
+.gep-ayuda-support-edit{border-top:1px solid var(--gh-line);padding-top:8px}
+.gep-ayuda-support-edit>summary{display:flex;align-items:center;gap:7px;cursor:pointer;list-style:none;color:var(--gh-deep);font-size:12px;font-weight:600}
+.gep-ayuda-support-edit>summary::-webkit-details-marker{display:none}
+.gep-ayuda-support-edit>summary .gep-ayuda-ico{width:15px;height:15px}
+.gep-ayuda-support-form{display:grid;gap:6px;margin-top:9px}
+.gep-ayuda-support-form label{font-size:12px;font-weight:600;color:var(--gh-ink)}
+.gep-ayuda-support-form input[type=email]{width:100%;min-height:36px;border:1px solid #cfdcd4;border-radius:8px;padding:0 10px;font-size:13px;background:var(--gh-card);color:var(--gh-ink)}
+.gep-ayuda-support-form input[type=email]:focus{border-color:var(--gh-accent);box-shadow:0 0 0 2px var(--gh-accent-soft);outline:0}
+.gep-ayuda-support-form input[type=email]:invalid:not(:placeholder-shown){border-color:#c0392b}
+.gep-ayuda-support-form small{color:var(--gh-muted);font-size:11px;line-height:1.4}
+.gep-ayuda-support-end{display:none}
+@media (max-width:1100px){
+  .gep-ayuda-support-end{display:block}
+  .gep-ayuda-support-end .gep-ayuda-support.is-end{display:grid;max-width:520px}
+}
+body.gep-theme-dark .gep-ayuda-support-msg.is-error{background:#3a1717;color:#ffb4b4}
+body.gep-theme-dark .gep-ayuda-support-form input[type=email]{border-color:#2c3a34;background:#111915}

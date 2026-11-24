@@ -1,0 +1,76 @@
+.gep-mo{--gep-border:#c3c4c7;--gep-ink:#1d2327;--gep-accent:#2271b1;max-width:1600px;color:var(--gep-ink)}
+.gep-mo h1{font-size:25px;font-weight:650;margin:18px 0 8px}.gep-version{font-size:12px;vertical-align:middle;font-weight:500;color:#657987}.gep-mo>.description{margin-bottom:19px}
+.gep-layout{display:grid;grid-template-columns:255px minmax(0,1fr);gap:18px;min-height:570px}.gep-sidebar,.gep-main{background:#fff;border:1px solid var(--gep-border);border-radius:10px;overflow:hidden;box-shadow:0 2px 10px #142d3a0b}.gep-sidebar{padding:16px 10px}.gep-main{padding:18px 20px}.gep-side-title{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 6px 15px;border-bottom:1px solid var(--gep-border)}.gep-folder{display:flex!important;align-items:center;gap:8px;width:100%;padding:10px 12px;background:none;border:0;text-align:left;color:#28414e;cursor:pointer;border-radius:6px;margin-top:3px;font-size:13px}.gep-folder:hover{background:#f6f7f7}.gep-folder.active{background:#e5f3ff;color:#135e96;font-weight:650}.gep-folder.drop-here{outline:2px dashed var(--gep-accent);background:#e5f3ff}.gep-folder .dashicons{font-size:16px;width:16px;height:16px}.gep-folder-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.gep-folder small{margin-left:auto;color:#687e86}.gep-folder-actions{display:flex;gap:5px;margin:20px 6px 0;flex-wrap:wrap}.gep-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding-bottom:15px;border-bottom:1px solid var(--gep-border)}.gep-toolbar h2{margin:0 0 4px;font-size:19px}.gep-toolbar-controls{display:flex;align-items:center;gap:8px}.gep-toolbar-controls input{min-width:210px}.gep-hint{color:#647883;margin:14px 0;font-size:12px}.gep-bulk{display:flex;align-items:center;gap:10px;padding:12px 0;flex-wrap:wrap}.gep-bulk[hidden],.gep-pagination [hidden]{display:none}.gep-bulk #gep-selected-count{font-weight:600}.gep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:13px}.gep-item{position:relative;min-width:0;display:flex;flex-direction:column;border:2px solid transparent;background:#f6f8f9;border-radius:8px;padding:5px;cursor:pointer;text-align:left;overflow:hidden}.gep-item:hover{border-color:#72aee6}.gep-item.selected{border-color:#2271b1;background:#e5f3ff}.gep-item img{width:100%;height:113px;object-fit:contain;background:#e9eef0;border-radius:4px}.gep-item-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;font-size:11px;padding:8px 4px 5px}.gep-check{position:absolute;top:10px;right:10px;z-index:1;background:#2271b1;color:white;border-radius:50%;padding:3px 6px;display:none}.gep-item.selected .gep-check{display:block}.gep-empty{grid-column:1/-1;padding:70px 20px;text-align:center;color:#647883}.gep-pagination{text-align:center;padding:26px}.gep-notice{font-weight:600;color:#135e96}.gep-notice.is-error{color:#ad3737}.gep-choice{display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%;padding:10px;background:#f3f7f8;border-radius:6px}.gep-choice select{max-width:270px}
+@media(max-width:780px){.gep-layout{grid-template-columns:1fr}.gep-sidebar{max-height:260px;overflow:auto}.gep-main{padding:12px}.gep-toolbar-controls{width:100%;flex-wrap:wrap}.gep-toolbar-controls input{flex:1;min-width:120px}.gep-grid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr))}}
+
+/* WordPress media picker: explorer, v1.5.0.
+   Keep the native media toolbar, attachments grid and details sidebar intact.
+   In WordPress the grid lives inside .attachments-wrapper, not directly in
+   .attachments-browser. Never force widths on WordPress .attachment items. */
+/* v1.6.1: only move the native panes to the right. Never change their right
+   edge, height or box-sizing: WordPress uses them to keep room for the details
+   sidebar and the toolbar height. Depending on the WordPress version and on
+   "Load more", the positioned element is .attachments-wrapper (WP 6) or the
+   .attachments list inside it (WP 7). Shifting both is safe: left does
+   nothing on the one that is not positioned. */
+.media-modal .attachments-browser.gep-explorer-active { --gep-sidebar-width: 224px; min-width: 0; }
+.media-modal .gep-explorer-active > .media-toolbar,
+.media-modal .gep-explorer-active > .attachments-wrapper,
+.media-modal .gep-explorer-active > .attachments-wrapper > .attachments,
+.media-modal .gep-explorer-active > .attachments,
+.media-modal .gep-explorer-active > .uploader-inline { left: var(--gep-sidebar-width) !important; }
+.media-modal .gep-explorer-active > .media-sidebar { z-index: 3; }
+.media-modal .gep-explorer {
+ position: absolute; top: 0; bottom: 0; left: 0; width: var(--gep-sidebar-width);
+ box-sizing: border-box; background: #fff; border-right: 1px solid #c3c4c7;
+ z-index: 5; display: flex; flex-direction: column; color: #1d2327; font-size: 13px;
+}
+.media-modal .gep-explorer-top { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px; border-bottom:1px solid #dcdcde; }
+.media-modal .gep-explorer-top strong { font-size:14px; }
+.media-modal .gep-explorer-current { padding:8px 12px; background:#f6f7f7; border-bottom:1px solid #dcdcde; font-size:12px; color:#50575e; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.media-modal .gep-explorer-tree { padding:7px 5px; flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; }
+.media-modal .gep-explorer-folder { display:flex; align-items:center; gap:6px; box-sizing:border-box; width:100%; min-height:34px; border:0; border-radius:3px; padding:7px 8px; background:transparent; text-align:left; color:#1d2327; cursor:pointer; font-size:12px; }
+.media-modal .gep-explorer-folder:hover { background:#f0f0f1; }
+.media-modal .gep-explorer-folder.is-active { background:#e5f3ff; color:#135e96; font-weight:600; }
+.media-modal .gep-explorer-folder .dashicons { font-size:17px; width:17px; height:17px; flex:none; color:#2271b1; }
+.media-modal .gep-explorer-folder-name { flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.media-modal .gep-explorer-folder small { color:#646970; font-size:11px; }
+.media-modal .gep-explorer-bottom { padding:9px; border-top:1px solid #dcdcde; background:#fff; }
+.media-modal .gep-explorer-row { display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:8px; }
+.media-modal .gep-explorer-row .button { width:100%; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.media-modal .gep-explorer-multi.is-on { background:#2271b1; border-color:#2271b1; color:#fff; }
+.media-modal .gep-multi-on .attachments .attachment:not(.selected) .thumbnail { opacity:.85; }
+.media-modal .gep-explorer-row .button { font-size:11px; padding:0 6px; min-height:27px; line-height:25px; }
+.media-modal .gep-explorer-move { width:100%; min-height:32px; font-size:12px; }
+.media-modal .gep-explorer-bottom p { margin:7px 0 0; font-size:10px; color:#646970; }
+.media-modal .gep-explorer-dialog { position:absolute; left:8px; right:8px; bottom:9px; max-height:80%; overflow:auto; z-index:6; background:#fff; border:1px solid #c3c4c7; box-shadow:0 4px 20px #0003; padding:12px; border-radius:3px; }
+.media-modal .gep-explorer-dialog[hidden] { display:none; }
+.media-modal .gep-explorer-field { display:block; margin-top:10px; font-size:12px; }
+.media-modal .gep-explorer-field span { display:block; margin-bottom:4px; }
+.media-modal .gep-explorer-field input, .media-modal .gep-explorer-field select { width:100%; max-width:100%; min-width:0; }
+.media-modal .gep-explorer-dialog-buttons { display:flex; gap:7px; margin-top:12px; }
+/* Collapsing must restore the native full-width browser, including wrapper. */
+.media-modal .gep-explorer-active.gep-explorer-collapsed > .gep-explorer { display:none; }
+.media-modal .gep-explorer-active.gep-explorer-collapsed > .media-toolbar,
+.media-modal .gep-explorer-active.gep-explorer-collapsed > .attachments-wrapper,
+.media-modal .gep-explorer-active.gep-explorer-collapsed > .attachments-wrapper > .attachments,
+.media-modal .gep-explorer-active.gep-explorer-collapsed > .attachments,
+.media-modal .gep-explorer-active.gep-explorer-collapsed > .uploader-inline { left:0 !important; }
+/* WordPress puts .media-toolbar at z-index 100 (WP 7) or lower: the toggle and the drawer must sit above it. */
+.media-modal .gep-explorer-toggle { display:none; position:absolute; left:10px; top:9px; z-index:112; }
+/* At narrow widths, sidebar is a drawer and never covers content by default. */
+.media-modal .gep-explorer-active.gep-explorer-compact > .media-toolbar,
+.media-modal .gep-explorer-active.gep-explorer-compact > .attachments-wrapper,
+.media-modal .gep-explorer-active.gep-explorer-compact > .attachments-wrapper > .attachments,
+.media-modal .gep-explorer-active.gep-explorer-compact > .attachments,
+.media-modal .gep-explorer-active.gep-explorer-compact > .uploader-inline { left:0 !important; }
+.media-modal .gep-explorer-active.gep-explorer-compact > .gep-explorer { width:230px; z-index:111; box-shadow:2px 0 12px #0002; }
+.media-modal .gep-explorer-active.gep-explorer-compact > .gep-explorer-toggle { display:block; }
+.media-modal .gep-explorer-active.gep-explorer-compact > .media-toolbar { padding-left:140px !important; }
+.media-modal .gep-explorer-active.gep-explorer-compact:not(.gep-explorer-collapsed) > .gep-explorer-toggle { left:240px; }
+
+/* v1.6.0: Mover carpeta, Ordenar fotos del GEP, Carpeta GEP field. */
+.gep-reparent-choice{margin:12px 6px 0;width:auto}.gep-reparent-choice label{width:100%;font-weight:600}.gep-reparent-choice select{width:100%;max-width:100%}
+.gep-auto{margin:22px 6px 4px;padding:14px 12px;background:#f3f7f8;border:1px solid #dcdcde;border-radius:8px;font-size:12px}.gep-auto>strong{display:block;font-size:13px;margin-bottom:4px}.gep-auto p{margin:4px 0 10px;color:#50575e}.gep-auto .button{white-space:normal;height:auto;line-height:1.4;padding:5px 10px}
+#gep-auto-result{margin-top:12px;border-top:1px solid #dcdcde;padding-top:10px}#gep-auto-result[hidden]{display:none}#gep-auto-result ul{margin:6px 0 12px}#gep-auto-result li{display:flex;justify-content:space-between;gap:8px;margin:0;padding:4px 0;border-bottom:1px dashed #dcdcde}
+.compat-field-gep_folder select.gep-folder-field{width:100%;max-width:100%}

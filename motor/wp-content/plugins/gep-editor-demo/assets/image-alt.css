@@ -1,0 +1,39 @@
+/* GEP Editor v9.21.0 · Descripción de imágenes. Usa la base visual del Historial (history.css). */
+.gep-alt .gep-alt-rows{display:grid;gap:8px}
+.gep-alt .gep-alt-row{display:block;padding:0;overflow:hidden}
+.gep-alt .gep-alt-row[hidden]{display:none}
+.gep-alt .gep-alt-row.is-open{border-color:var(--hx-accent);box-shadow:0 0 0 3px rgba(8,118,79,.10)}
+.gep-alt .gep-alt-row.is-saved{border-color:var(--hx-accent);box-shadow:0 0 0 3px rgba(8,118,79,.16)}
+.gep-alt-open{appearance:none;display:grid;grid-template-columns:72px minmax(0,1fr) auto;align-items:center;gap:14px;width:100%;padding:10px 14px 10px 10px;border:0;background:transparent;text-align:left;cursor:pointer;color:inherit;font:inherit}
+.gep-alt-open:focus-visible{outline:2px solid var(--hx-accent);outline-offset:-2px;border-radius:12px}
+.gep-alt-thumb{display:block;width:72px;height:54px;border-radius:8px;overflow:hidden;background:var(--hx-soft);border:1px solid var(--hx-line)}
+.gep-alt-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.gep-alt .gep-alt-text{display:block;font-weight:650}
+.gep-alt .gep-alt-text em{font-style:normal;font-weight:600;color:var(--hx-warn)}
+.gep-alt-file{font-variant-numeric:tabular-nums;color:var(--hx-muted);overflow-wrap:anywhere}
+.gep-alt-arrow{color:#829087;transition:transform .15s}
+.gep-alt-row.is-open .gep-alt-arrow{transform:rotate(90deg)}
+.gep-alt-editor{display:grid;grid-template-columns:minmax(160px,260px) minmax(0,1fr);gap:16px;padding:14px;border-top:1px solid var(--hx-line);background:var(--hx-soft)}
+.gep-alt-editor[hidden]{display:none}
+.gep-alt-preview{display:block;width:100%;max-height:220px;object-fit:contain;border-radius:9px;background:#fff;border:1px solid var(--hx-line)}
+.gep-alt-form{display:grid;gap:8px;align-content:start}
+.gep-alt-form label{font-weight:700;color:var(--hx-ink-2);font-size:13px}
+.gep-alt-form textarea{width:100%;min-height:70px;border:1px solid #ccd5cf;border-radius:8px;padding:9px 11px;font-size:13.5px;line-height:1.45;color:var(--hx-ink);background:#fff;resize:vertical;box-shadow:none}
+.gep-alt-form textarea:focus{border-color:var(--hx-accent);box-shadow:0 0 0 2px rgba(8,118,79,.14);outline:0}
+.gep-alt-tip{margin:0;font-size:12px;color:var(--hx-muted)}
+.gep-alt-own{margin:0;font-size:12px;color:var(--hx-info);background:var(--hx-info-bg);border-radius:8px;padding:7px 9px}
+.gep-alt-own .dashicons{font-size:15px;width:15px;height:15px;vertical-align:-3px}
+.gep-alt-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.gep-alt-status{font-size:12px;color:var(--hx-muted)}
+.gep-alt-status.is-error{color:var(--hx-bad)}
+.gep-alt-media-link{margin-left:auto;font-size:12px;color:var(--hx-accent);text-decoration:none}
+.gep-alt-media-link:hover{text-decoration:underline}
+.gep-alt .gep-hx-chips button.gep-hx-chip{cursor:pointer;font:inherit;font-size:13px}
+.gep-alt-search{grid-template-columns:1fr}
+@media(max-width:782px){
+  .gep-alt-open{grid-template-columns:56px minmax(0,1fr) auto;gap:10px}
+  .gep-alt-thumb{width:56px;height:44px}
+  .gep-alt-editor{grid-template-columns:1fr}
+  .gep-alt-media-link{margin-left:0}
+}
+.gep-alt [hidden]{display:none!important}

@@ -1,0 +1,8 @@
+# Nunca al repositorio: credenciales, base de datos, archivos subidos, respaldos
+wp-config.php
+**/wp-content/uploads/
+*.sql
+*.sql.gz
+*.zip
+*.bak
+.DS_Store

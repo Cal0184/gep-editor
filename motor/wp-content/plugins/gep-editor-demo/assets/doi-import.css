@@ -1,0 +1,45 @@
+/* GEP Editor v9.21.0 · Importar por DOI. Mismos colores y bordes que el editor de publicaciones. */
+.gep-publication-record-toolbar .gep-doi-open{border-color:#b8d2c1!important;background:#fff!important;color:#175f39!important;font-weight:700!important}
+.gep-publication-record-toolbar .gep-doi-open:hover,.gep-publication-record-toolbar .gep-doi-open[aria-expanded="true"]{border-color:#7fa98d!important;background:#e3f2e8!important;color:#104b2d!important}
+.gep-publication-record-toolbar .gep-doi-open .dashicons{font-size:16px;width:16px;height:16px;vertical-align:-3px;margin-right:2px}
+.gep-doi-panel{border:1px solid #bcd1c3;border-radius:9px;background:#f8fbf9;padding:15px;margin:0 0 12px;box-shadow:0 8px 20px rgba(31,90,59,.07)}
+.gep-doi-panel.is-hidden{display:none}
+.gep-doi-panel>label{display:block;font-weight:650;color:#25372d;font-size:13px}
+.gep-doi-panel textarea{width:100%;max-width:100%;margin-top:7px;border:1px solid #ccd5cf;border-radius:7px;padding:8px 10px;min-height:76px;background:#fff;color:#17271e;box-shadow:none;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;resize:vertical}
+.gep-doi-panel .gep-muted{margin:6px 0 10px;font-size:12px}
+.gep-doi-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.gep-doi-actions .button .dashicons,.gep-doi-footer .button .dashicons{font-size:16px;width:16px;height:16px;vertical-align:-3px;margin-right:2px}
+.gep-doi-progress{font-size:12px;color:#4d5f55}
+.gep-doi-progress .dashicons{color:#1f7a49;font-size:17px;width:17px;height:17px;vertical-align:-4px}
+.gep-doi-results{display:grid;gap:8px;margin-top:12px}
+.gep-doi-results:empty{display:none}
+.gep-doi-card{display:flex;align-items:flex-start;gap:10px;border:1px solid #dfe5e1;border-radius:9px;background:#fff;padding:11px 12px}
+.gep-doi-card.is-ok{border-color:#b8d2c1}
+.gep-doi-card.is-duplicate{border-color:#e7d49e;background:#fffdf7}
+.gep-doi-card.is-error{border-color:#e9bbb6;background:#fff8f7}
+.gep-doi-card>.dashicons{color:#6b7b72;margin-top:2px;flex:0 0 auto}
+.gep-doi-card.is-error>.dashicons{color:#b04a3f}
+.gep-doi-check{flex:0 0 auto;padding-top:3px}
+.gep-doi-check input{margin:0}
+.gep-doi-card-body{flex:1;min-width:0;display:grid;gap:5px}
+.gep-doi-card-body>strong{font-size:12px;color:#20372a;word-break:break-all}
+.gep-doi-card-body>p{margin:0;font-size:12px;color:#5c6b63}
+.gep-doi-card-top{display:flex;align-items:center;gap:9px;min-width:0}
+.gep-doi-card-title{font-size:13px;color:#1e3f2c;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gep-doi-card-ref{margin:0;font-size:12px;line-height:1.5;color:#34463b}
+.gep-doi-card-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.gep-doi-card-meta select{min-height:30px;border:1px solid #ccd5cf;border-radius:7px;padding:2px 26px 2px 8px;font-size:12px;color:#17271e}
+.gep-doi-card-meta a{font-size:11px;color:#1f6b42;text-decoration:none;word-break:break-all}
+.gep-doi-card-meta a:hover{text-decoration:underline}
+.gep-doi-pill{flex:0 0 auto;font-size:10px;font-weight:750;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:3px 8px;white-space:nowrap}
+.gep-doi-pill.is-ok{background:#e3f2e8;color:#175f39}
+.gep-doi-pill.is-duplicate{background:#fbf1d3;color:#7a5a12}
+.gep-doi-pill.is-error{background:#fbe3df;color:#9a3b30}
+.gep-doi-footer{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid #e6ebe8;font-size:12px;color:#4d5f55}
+.gep-doi-footer.is-hidden{display:none}
+@media(max-width:782px){.gep-doi-card{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 10px}.gep-doi-pill{grid-column:1/-1;grid-row:1;justify-self:start}.gep-doi-card-title{white-space:normal}.gep-doi-footer{justify-content:space-between}}
+.gep-doi-panel .button-primary{background:linear-gradient(180deg,#087a52,#056b47)!important;border-color:#056b47!important;color:#fff!important;font-weight:700}
+.gep-doi-panel .button-primary:hover{background:#056b47!important}
+.gep-doi-panel .button-primary:disabled{opacity:.55}
+.gep-doi-close{padding:0!important;color:#6e7b74!important;border:0!important;box-shadow:none!important;background:none!important}
+.gep-doi-close .dashicons{font-size:20px;width:20px;height:20px}

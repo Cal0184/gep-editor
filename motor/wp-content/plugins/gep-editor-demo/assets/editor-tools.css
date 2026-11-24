@@ -1,0 +1,168 @@
+/* GEP Editor · v9.26.0 · Herramientas comunes: encuadre de la foto, botones,
+   lista única de proyectos y aviso del video de cabecera.
+   Mismo lenguaje visual que editor.css (verde GEP, bordes suaves, radios 9-14px). */
+
+/* ---------- Encuadre aplicado (igual que el sitio público) ---------- */
+[data-gep-frame],[data-gep-frame-bg]{--gep-ux:var(--gep-px,50%);--gep-uy:var(--gep-py,50%)}
+.is-device-mobile [data-gep-frame],.is-device-mobile [data-gep-frame-bg],.gep-frame-views figure[data-view="mobile"] [data-gep-frame]{--gep-ux:var(--gep-mx,var(--gep-px,50%));--gep-uy:var(--gep-my,var(--gep-py,50%))}
+img[data-gep-frame]{object-position:var(--gep-ux) var(--gep-uy)!important}
+[data-gep-frame-bg]{background-position:var(--gep-ux) var(--gep-uy)!important}
+img[data-gep-frame][data-gep-zoom]{transform-origin:var(--gep-ux) var(--gep-uy);scale:var(--gep-z,1);clip-path:inset(calc(var(--gep-uy) * var(--gep-k,0)) calc((100% - var(--gep-ux)) * var(--gep-k,0)) calc((100% - var(--gep-uy)) * var(--gep-k,0)) calc(var(--gep-ux) * var(--gep-k,0)))}
+
+/* ---------- Botón «Encuadre de la foto» ---------- */
+.gep-frame-open{display:inline-flex!important;align-items:center;gap:5px}
+.gep-frame-open[hidden]{display:none!important}
+.gep-frame-open .dashicons{font-size:16px;width:16px;height:16px;line-height:16px}
+.gep-frame-badge{display:inline-block;margin-left:2px;padding:1px 7px;border-radius:999px;background:var(--gep-success-bg,#e7f5ec);color:var(--gep-success,#176640);font-size:10.5px;font-weight:750;line-height:16px}
+.gep-frame-badge[hidden]{display:none}
+/* El antiguo selector de punto de «Mensaje de paisaje» queda reemplazado por la herramienta común. */
+.gep-has-frame-tool .gep-landscape-picker,.gep-has-frame-tool .gep-landscape-center,.gep-has-frame-tool .gep-landscape-hint{display:none!important}
+
+/* ---------- Ventana de encuadre ---------- */
+body.gep-frame-modal-open{overflow:hidden}
+.gep-frame-modal[hidden]{display:none!important}
+.gep-frame-modal{position:fixed;inset:0;z-index:100100;display:flex;align-items:center;justify-content:center;padding:18px}
+.gep-frame-backdrop{position:absolute;inset:0;background:rgba(7,26,19,.55)}
+.gep-frame-dialog{position:relative;display:flex;flex-direction:column;width:min(1080px,100%);max-height:calc(100vh - 36px);background:var(--gep-card,#fff);color:var(--gep-ink,#101b17);border:1px solid var(--gep-line,#dfe7e2);border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.28);outline:0;overflow:hidden}
+.gep-frame-head{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--gep-line,#dfe7e2)}
+.gep-frame-head span:not(.dashicons){display:block;font-size:11px;font-weight:750;letter-spacing:.06em;text-transform:uppercase;color:var(--gep-accent,#08764f)}
+.gep-frame-head strong{display:block;font-size:16px;line-height:1.3}
+.gep-frame-icon{display:inline-flex!important;align-items:center;justify-content:center;width:36px!important;height:36px!important;border-radius:10px;background:var(--gep-success-bg,#e7f5ec);color:var(--gep-accent,#08764f);font-size:20px!important}
+.gep-frame-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:22px;padding:18px 20px;overflow:auto}
+.gep-frame-help{margin:0 0 10px;color:#4f5d56;font-size:13px}
+.gep-frame-source{position:relative;display:block;border-radius:10px;overflow:hidden;background:#eef2ef;cursor:crosshair;touch-action:none;user-select:none;outline-offset:3px}
+.gep-frame-source img{display:block;width:100%;height:auto;max-height:46vh;object-fit:contain;pointer-events:none}
+.gep-frame-dot{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;border:3px solid #fff;background:rgba(8,118,79,.85);box-shadow:0 0 0 2px rgba(8,118,79,.45),0 2px 8px rgba(0,0,0,.35);pointer-events:none}
+.gep-frame-dot.is-mobile{background:rgba(32,102,170,.9);box-shadow:0 0 0 2px rgba(32,102,170,.45),0 2px 8px rgba(0,0,0,.35)}
+.gep-frame-controls{display:grid;gap:10px;margin-top:14px}
+.gep-frame-zoom{display:grid;grid-template-columns:auto minmax(0,1fr) 52px;align-items:center;gap:10px;font-weight:650}
+.gep-frame-zoom[hidden],.gep-frame-split[hidden],.gep-frame-zoom-note[hidden],.gep-frame-target[hidden]{display:none!important}
+.gep-frame-zoom input{width:100%;accent-color:var(--gep-accent,#08764f)}
+.gep-frame-zoom output{text-align:right;font-variant-numeric:tabular-nums;color:#4f5d56}
+.gep-frame-zoom-note{margin:0;font-size:12.5px;color:#5f6c65}
+.gep-frame-split{display:flex;align-items:center;gap:8px;font-weight:600}
+.gep-frame-target{display:inline-flex;gap:0;border:1px solid var(--gep-line,#dfe7e2);border-radius:999px;padding:3px;width:max-content}
+.gep-frame-target button{border:0;background:transparent;border-radius:999px;padding:6px 13px;font-weight:650;cursor:pointer;color:inherit}
+.gep-frame-target button.is-active{background:var(--gep-accent,#08764f);color:#fff}
+.gep-frame-views{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1.35fr) minmax(0,.9fr);gap:14px;align-items:start;align-content:start}
+.gep-frame-views figure{margin:0}
+.gep-frame-box{position:relative;overflow:hidden;border-radius:9px;background:#dfe6e1;cursor:grab;touch-action:none;outline-offset:3px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.gep-frame-box:active{cursor:grabbing}
+.gep-frame-box img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none}
+.gep-frame-views figure.is-editing .gep-frame-box{box-shadow:0 0 0 2px var(--gep-accent,#08764f)}
+.gep-frame-views figcaption{display:flex;align-items:center;gap:5px;margin-top:6px;font-size:12px;font-weight:650;color:#4f5d56}
+.gep-frame-views figcaption .dashicons{font-size:15px;width:15px;height:15px}
+.gep-frame-views-note{grid-column:1/-1;margin:0;font-size:12px;color:#6b7771}
+.gep-frame-foot{display:flex;align-items:center;gap:10px;padding:14px 20px;border-top:1px solid var(--gep-line,#dfe7e2);background:var(--gep-shell,#f4f7f5)}
+.gep-frame-foot .button{display:inline-flex;align-items:center;gap:5px;height:38px;padding:0 15px}
+.gep-frame-spacer{flex:1}
+@media (max-width:860px){
+  .gep-frame-modal{padding:0;align-items:stretch}
+  .gep-frame-dialog{max-height:100vh;height:100%;border-radius:0}
+  .gep-frame-body{grid-template-columns:1fr;gap:16px;padding:14px}
+  .gep-frame-source img{max-height:34vh}
+  .gep-frame-views{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+  .gep-frame-views figure[data-view="desktop"]{grid-column:1/-1}
+  .gep-frame-foot{flex-wrap:wrap}
+  .gep-frame-foot .gep-frame-spacer{display:none}
+  .gep-frame-foot .gep-frame-apply{flex:1;justify-content:center}
+}
+
+/* ---------- Botones principal / secundario ---------- */
+.gep-btn-pair{margin:6px 0 14px}
+.gep-btn-pair-head .gep-muted{margin:2px 0 10px}
+.gep-btn-pair-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:1100px){.gep-btn-pair-grid{grid-template-columns:1fr}}
+.gep-btn-card{border:1px solid var(--gep-line,#dfe7e2);border-radius:12px;background:var(--gep-card,#fff);padding:12px 13px;margin:8px 0}
+.gep-btn-pair .gep-btn-card{margin:0}
+.gep-btn-card.is-primary{border-top:3px solid var(--gep-accent,#08764f)}
+.gep-btn-card.is-secondary{border-top:3px solid #9fb8aa}
+.gep-btn-card-head{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.gep-btn-card-title{flex:1;min-width:120px}
+.gep-btn-card-title strong{display:block;font-size:13.5px}
+.gep-btn-card-title small{display:block;color:#66736c;font-size:12px}
+.gep-btn-sample{display:inline-flex;align-items:center;max-width:220px;min-height:30px;padding:0 13px;border-radius:999px;font-size:12px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;order:3}
+.gep-btn-sample.is-primary{background:#163f2b;color:#fff;border:1px solid #163f2b}
+.gep-btn-sample.is-secondary{background:transparent;color:#163f2b;border:1px solid #9fb8aa}
+.gep-btn-card.is-off .gep-btn-sample{opacity:.38;text-decoration:line-through}
+.gep-btn-card.is-off .gep-btn-card-body{opacity:.55}
+.gep-btn-switch{display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-size:12px;font-weight:700;order:4}
+.gep-btn-switch input{position:absolute;opacity:0;width:1px;height:1px}
+.gep-btn-switch-track{position:relative;width:34px;height:20px;border-radius:999px;background:#c4cec8;transition:background .15s}
+.gep-btn-switch-track:after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.gep-btn-switch input:checked+.gep-btn-switch-track{background:var(--gep-accent,#08764f)}
+.gep-btn-switch input:checked+.gep-btn-switch-track:after{transform:translateX(14px)}
+.gep-btn-switch input:focus-visible+.gep-btn-switch-track{outline:2px solid var(--gep-accent,#08764f);outline-offset:2px}
+.gep-btn-card-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:11px}
+.gep-btn-pair .gep-btn-card-body{grid-template-columns:1fr}
+.gep-btn-field{display:grid;gap:4px;font-weight:650;font-size:12.5px}
+.gep-btn-field input,.gep-btn-field select{width:100%;max-width:none}
+.gep-btn-field[hidden]{display:none!important}
+.gep-btn-field small{font-weight:400}
+.gep-link-custom{grid-column:1/-1}
+.gep-btn-preview-off{display:none!important}
+
+/* ---------- Proyectos: una sola lista ---------- */
+.gep-project-status-filter{display:inline-flex;flex-wrap:wrap;gap:4px;border:1px solid var(--gep-line,#dfe7e2);border-radius:999px;padding:3px;margin:0 0 10px;background:var(--gep-card,#fff)}
+.gep-project-status-filter button{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;border-radius:999px;padding:6px 13px;font-weight:700;cursor:pointer;color:inherit}
+.gep-project-status-filter button b{display:inline-block;min-width:18px;padding:0 6px;border-radius:999px;background:rgba(8,118,79,.1);font-size:11px;line-height:18px;text-align:center}
+.gep-project-status-filter button.is-active{background:var(--gep-accent,#08764f);color:#fff}
+.gep-project-status-filter button.is-active b{background:rgba(255,255,255,.22)}
+.gep-project-record-list-row .gep-project-record-open{grid-template-columns:75px minmax(0,1fr) auto auto!important}
+.gep-project-status-pill{flex:0 0 auto;border:1px solid transparent;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:750;cursor:pointer;white-space:nowrap}
+.gep-project-record-list-row.is-status-vigente .gep-project-status-pill{background:var(--gep-success-bg,#e7f5ec);color:var(--gep-success,#176640);border-color:#cfe6d7}
+.gep-project-record-list-row.is-status-cerrado .gep-project-status-pill{background:#f1f3f2;color:#55615b;border-color:#e0e5e2}
+.gep-project-status-pill:hover{border-color:currentColor}
+.gep-project-dup-badge{justify-self:start;padding:1px 7px;border-radius:999px;background:var(--gep-warn-bg,#fff3dd);color:var(--gep-warn,#9a6510);font-size:10.5px;font-weight:750;white-space:nowrap}
+.gep-project-dup-badge[hidden]{display:none}
+.gep-project-filter-empty{margin:8px 0 0;color:#66736c}
+.gep-project-filter-empty[hidden]{display:none}
+
+/* ---------- Video de cabecera: aviso ---------- */
+.gep-video-status{margin:8px 0 0;padding:7px 10px;border-radius:8px;font-size:12.5px;line-height:1.4}
+.gep-video-status.is-ok{background:var(--gep-success-bg,#e7f5ec);color:var(--gep-success,#176640)}
+.gep-video-status.is-wait{background:#eef3f8;color:#33536e}
+.gep-video-status.is-warn{background:var(--gep-warn-bg,#fff3dd);color:var(--gep-warn,#9a6510)}
+
+/* ---------- Modo oscuro ---------- */
+body.gep-theme-dark .gep-frame-dialog{background:#1d1d1d;color:#e7efea;border-color:#2c3a34}
+body.gep-theme-dark .gep-frame-foot{background:#181818;border-color:#2c3a34}
+body.gep-theme-dark .gep-frame-head{border-color:#2c3a34}
+body.gep-theme-dark .gep-frame-help,body.gep-theme-dark .gep-frame-zoom output,body.gep-theme-dark .gep-frame-zoom-note,body.gep-theme-dark .gep-frame-views figcaption,body.gep-theme-dark .gep-frame-views-note{color:#9aaca2}
+body.gep-theme-dark .gep-frame-source,body.gep-theme-dark .gep-frame-box{background:#262b28}
+body.gep-theme-dark .gep-btn-card,body.gep-theme-dark .gep-project-status-filter{background:#1d1d1d;border-color:#2c3a34}
+body.gep-theme-dark .gep-btn-card-title small{color:#9aaca2}
+body.gep-theme-dark .gep-btn-sample.is-secondary{color:#cfe3d7;border-color:#4f6b5c}
+body.gep-theme-dark .gep-project-record-list-row.is-status-cerrado .gep-project-status-pill{background:#262b28;color:#b9c6be;border-color:#35413a}
+body.gep-theme-dark .gep-project-record-list-row.is-status-vigente .gep-project-status-pill{background:#173025;color:#8fd8b0;border-color:#24533b}
+body.gep-theme-dark .gep-video-status.is-ok{background:#173025;color:#8fd8b0}
+body.gep-theme-dark .gep-video-status.is-warn{background:#33280f;color:#f0c97a}
+body.gep-theme-dark .gep-video-status.is-wait{background:#16222c;color:#a9c8e0}
+
+/* Botones de la ventana con el mismo estilo que la barra superior del editor. */
+.gep-frame-foot .button:not(.button-primary){background:#fff!important;border:1px solid #a9c0b3!important;color:#245f42!important;border-radius:9px}
+.gep-frame-foot .button:not(.button-primary):hover{background:#f2f8f4!important;border-color:#6f9c82!important;color:#174f35!important}
+.gep-frame-foot .button-primary{background:linear-gradient(180deg,#087a52,#056b47)!important;border-color:#056b47!important;color:#fff!important;border-radius:9px}
+.gep-frame-foot .button-primary:hover{background:linear-gradient(180deg,#086e4a,#055f40)!important;border-color:#055f40!important}
+.gep-frame-split input[type=checkbox]:checked{accent-color:var(--gep-accent,#08764f)}
+body.gep-theme-dark .gep-frame-foot .button:not(.button-primary){background:#1d1d1d!important;border-color:#3d644b!important;color:#cfe3d7!important}
+
+/* ---------- v9.26.0 · Un solo «Guardar cambios», siempre a mano ----------
+   Se quitó el botón inferior. En PC la barra superior ya acompaña al bajar
+   (ux.css). En tablet y teléfono esa barra no se fija (decisión de 9.24.1),
+   así que el MISMO botón de la barra se muestra flotando abajo a la derecha.
+   Solo CSS con posición constante: nada se mide al desplazarse. */
+@media (max-width:1180px),(max-height:559px){
+  body.toplevel_page_gep-content-editor .gep-editor-wrap .gep-contact-commandbar .gep-save-button{
+    position:fixed!important;right:16px!important;bottom:16px!important;left:auto!important;top:auto!important;z-index:9990!important;
+    width:auto!important;max-width:calc(100vw - 32px)!important;flex:0 0 auto!important;margin:0!important;min-width:0!important;height:46px!important;padding:0 18px!important;border-radius:999px!important;
+    box-shadow:0 10px 26px rgba(5,60,40,.28)!important
+  }
+  body.toplevel_page_gep-content-editor .gep-editor-wrap .gep-contact-commandbar .gep-save-button:disabled{box-shadow:0 4px 14px rgba(0,0,0,.12)!important}
+  body.toplevel_page_gep-content-editor .gep-editor-wrap{padding-bottom:76px}
+}
+/* Teléfonos: encima de la barra de pestañas inferior. */
+@media (max-width:782px){
+  body.toplevel_page_gep-content-editor .gep-editor-wrap .gep-contact-commandbar .gep-save-button{bottom:76px!important;right:12px!important}
+  body.toplevel_page_gep-content-editor .gep-editor-wrap{padding-bottom:140px}
+}
