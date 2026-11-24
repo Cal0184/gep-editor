@@ -1,5 +1,8 @@
 # GEP Editor — CHANGELOG
 
+## 10.0.1 · Botón «Modo oscuro» visible en la Ayuda (24-11-2026)
+- En la Ayuda, en modo claro, el botón «Modo oscuro» quedaba blanco sobre fondo claro (funcionaba pero no se veía). Ahora usa el mismo estilo que «Abrir historial». Solo cambia `assets/dark.css`; el modo oscuro queda igual.
+
 ## 10.0.0 · Versión definitiva de producción (24-11-2026)
 Deja de llamarse «GEP Editor Beta». Misma carpeta (`gep-editor-demo`) y mismo archivo principal: WordPress lo mantiene activo y todo el contenido sigue igual. No hay migración de datos. Va con `gep-config-migracion.php` 10.0.0 y gep-acceso 10.0.0; sitio público 9.29.0 y Media Organizer 1.6.4 sin cambios.
 - **Guardado seguro** (`assets/edit-lock.js`, `includes/edit-lock.php`): antes de enviar se comprueba la sesión y la conexión. Si la sesión venció, no hay Internet o el servidor no responde, no se envía nada y aparece un aviso con el estilo del editor; lo escrito sigue en pantalla. Tras volver a iniciar sesión en otra pestaña, «Ya entré, guardar» renueva las claves de seguridad y guarda. Las claves también se renuevan solas si la pestaña llevaba más de un día abierta. Si una clave vencida llega igual al servidor, se explica en vez de «El enlace ha caducado».

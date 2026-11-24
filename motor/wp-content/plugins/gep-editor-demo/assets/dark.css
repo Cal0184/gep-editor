@@ -947,12 +947,14 @@ body.gep-theme-dark :is(.gep-editor-wrap,.gep-hx,.gep-ayuda) textarea:focus{
 }
 
 /* El interruptor dentro de la cabecera verde de la Ayuda */
+/* 10.0.1: en modo claro la cabecera es clara; el botón usa el estilo de «Abrir historial» */
 .gep-ayuda-hero-actions .gep-theme-toggle{
-  height:38px;border-radius:9px;
-  background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.38);color:#fff;
+  height:44px;padding:0 16px;border-radius:9px;border-width:1.5px;font-size:14px;
+  background:#fff;border-color:var(--gh-deep2,#1d5f3e);color:var(--gh-deep,#143d2b);
 }
-.gep-ayuda-hero-actions .gep-theme-toggle:hover{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.6)}
+.gep-ayuda-hero-actions .gep-theme-toggle:hover,.gep-ayuda-hero-actions .gep-theme-toggle:focus{background:var(--gh-mint,#e6f3ec);color:var(--gh-deep,#143d2b);border-color:var(--gh-deep2,#1d5f3e)}
 body.gep-theme-dark .gep-ayuda-hero-actions .gep-theme-toggle{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.26);color:#dff0e7}
+body.gep-theme-dark .gep-ayuda-hero-actions .gep-theme-toggle:hover,body.gep-theme-dark .gep-ayuda-hero-actions .gep-theme-toggle:focus{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.45);color:#fff}
 
 /* Ayuda: elementos cuyo fondo es el verde de marca necesitan texto oscuro */
 body.gep-theme-dark .gep-ayuda-btn.is-primary,

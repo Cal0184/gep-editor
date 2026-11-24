@@ -2,7 +2,7 @@
 /**
  * Plugin Name: GEP Editor
  * Description: Editor guiado de contenido para GEP. Incluye Inicio, Quiénes somos, Contacto, Docencia, Proyectos, Servicios, Publicaciones, Comunicaciones y Noticias, con historial, preview, validación, filtros, orden drag & drop, duplicado y edición guiada.
- * Version: 10.0.0
+ * Version: 10.0.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'GEP_EDITOR_VERSION' ) ) {
-    define( 'GEP_EDITOR_VERSION', '10.0.0' );
+    define( 'GEP_EDITOR_VERSION', '10.0.1' );
 }
 if ( ! defined( 'GEP_EDITOR_PLUGIN_FILE' ) ) {
     define( 'GEP_EDITOR_PLUGIN_FILE', __FILE__ );
