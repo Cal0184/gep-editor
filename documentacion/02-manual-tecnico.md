@@ -1,6 +1,6 @@
 # GEP 10.0 · Manual técnico
 
-Para quien mantenga o desarrolle el sitio en el futuro. Describe la arquitectura, los archivos, los datos y las reglas del proyecto. Estado a 24-11-2026: GEP Editor 10.0.0, gep-acceso 10.0.0, configuración 10.0.0, sitio público 9.29.0, GEP Media Organizer 1.6.4, WordPress 7.1, PHP 8.4, MariaDB 10.6.
+Para quien mantenga o desarrolle el sitio en el futuro. Describe la arquitectura, los archivos, los datos y las reglas del proyecto. Estado a 25-11-2026: GEP Editor 10.0.2, gep-acceso 10.0.0, configuración 10.0.0, sitio público 9.29.0, GEP Media Organizer 1.6.4, WordPress 7.1, PHP 8.4, MariaDB 10.6.
 
 ## 1. Arquitectura
 
@@ -107,6 +107,7 @@ Páginas: se reconocen por su nombre/slug (inicio, quienes-somos, docencia, proy
 | `GEP_PERMITIR_INSTALADOR` true | Abre el instalador (solo para una reinstalación planificada). |
 | `GEP_PROXY_HTTPS` | true en el servidor de la Universidad. |
 | `GEP_SITIO_PRIVADO_APAGADO` true | Deja el sitio público aunque el interruptor esté encendido. |
+| `GEP_PRIVADO_MAX_FALLOS` / `GEP_PRIVADO_MINUTOS_PAUSA` | Acceso al sitio: claves equivocadas seguidas antes de pausar (30) y minutos de pausa (10). |
 | `GEP_PROTEGER_ARCHIVOS` false | Permite borrar archivos en uso. |
 | `GEP_ACCESO_APAGADO` true | Apaga gep-acceso (emergencia). |
 | `GEP_EDITOR_DISABLE_STICKY` true | Barra y vista previa sin fijar. |
@@ -124,7 +125,7 @@ Páginas: se reconocen por su nombre/slug (inicio, quienes-somos, docencia, proy
 
 ## 7. Cómo probar un cambio
 
-1. Ambiente local: ver `ambiente-local/GUIA-ambiente-local-LocalWP.md` del proyecto, o un WordPress 7.x con la base exportada (cambiar `home`/`siteurl`).
+1. Ambiente local: ver [07 · Ambiente local](07-ambiente-local.md).
 2. `php -l` en cada archivo PHP modificado.
 3. Abrir las 9 pestañas, guardar cada una sin cambios y comparar los metadatos `gep_*` antes/después: deben quedar iguales.
 4. Abrir las 10 páginas públicas y revisar que no haya errores en el registro de PHP.

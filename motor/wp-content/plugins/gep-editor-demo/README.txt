@@ -1,4 +1,4 @@
-GEP Editor v10.0.1 (versión definitiva de producción)
+GEP Editor v10.0.2 (versión definitiva de producción)
 
 Editor guiado para Inicio, Quiénes somos, Contacto, Docencia, Proyectos, Servicios, Publicaciones, Comunicaciones y Noticias del sitio del Laboratorio GEP.
 Cambios: CHANGELOG.md. Manuales (usuario, técnico, instalación, respaldo): carpeta «documentacion» del paquete de entrega y del repositorio, no se suben al servidor.

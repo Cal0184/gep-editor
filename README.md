@@ -1,6 +1,6 @@
 # Sitio web del Laboratorio GEP · Código y traspaso
 
-Código del sitio **https://gep.uchile.cl/gep/** (Laboratorio de Geomática y Ecología del Paisaje, Universidad de Chile) y de su editor de contenido **GEP Editor 10.0.0**, versión definitiva entregada el 24-11-2026.
+Código del sitio **https://gep.uchile.cl/gep/** (Laboratorio de Geomática y Ecología del Paisaje, Universidad de Chile) y de su editor de contenido **GEP Editor 10.0.2** (versión definitiva 10.0.0 entregada el 24-11-2026, con ajustes 10.0.1 y 10.0.2).
 
 Este repositorio es el **traspaso** del proyecto al equipo GEP: todo lo necesario para seguir usando, manteniendo y mejorando el sitio sin depender de quien lo desarrolló.
 
@@ -31,7 +31,7 @@ Detalle completo: [Manual técnico](documentacion/02-manual-tecnico.md).
 | --- | --- | --- |
 | `sitio-publico/` | `/gep/` | Sitio público 9.29.0 |
 | `motor/gep-config-migracion.php` | `/gep/motor/` | Ajustes GEP de WordPress (se carga desde `wp-config.php`) |
-| `motor/wp-content/plugins/gep-editor-demo/` | `/gep/motor/wp-content/plugins/` | GEP Editor 10.0.0 (el nombre de la carpeta es histórico: no cambiarlo) |
+| `motor/wp-content/plugins/gep-editor-demo/` | `/gep/motor/wp-content/plugins/` | GEP Editor 10.0.2 (el nombre de la carpeta es histórico: no cambiarlo) |
 | `motor/wp-content/plugins/gep-media-organizer/` | igual | Carpetas de la Mediateca 1.6.4 |
 | `motor/wp-content/mu-plugins/` | `/gep/motor/wp-content/mu-plugins/` | gep-acceso 10.0.0 y gep-seguridad 1.0.0 |
 | `documentacion/` | **no se sube** | Manuales |
@@ -48,6 +48,7 @@ Detalle completo: [Manual técnico](documentacion/02-manual-tecnico.md).
 | [04 · Respaldo y recuperación](documentacion/04-respaldo-y-recuperacion.md) | Qué respaldar, cómo restaurar, qué hacer ante cada error |
 | [05 · Requisitos y dependencias](documentacion/05-requisitos-y-dependencias.md) | Servidor, versiones, servicios externos, roles |
 | [06 · Registro de cambios 10.0.0](documentacion/06-registro-de-cambios-10.0.0.md) | Qué cambió en la versión definitiva y cómo se validó |
+| [07 · Ambiente local](documentacion/07-ambiente-local.md) | Copia del sitio en un computador para probar cambios sin tocar el servidor |
 | [CHANGELOG del editor](motor/wp-content/plugins/gep-editor-demo/CHANGELOG.md) | Historia completa versión por versión |
 
 ## 5. Lo que el equipo GEP debe hacer (traspaso)
@@ -66,6 +67,8 @@ Detalle completo: [Manual técnico](documentacion/02-manual-tecnico.md).
 - [ ] **Cada semana**: Historial de cambios → Respaldo completo → Descargar, y guardarlo en la carpeta compartida del laboratorio (fuera del servidor).
 - [ ] **Cada mes**: exportar la base de datos y descargar las fotos nuevas (ver [manual de respaldo](documentacion/04-respaldo-y-recuperacion.md)).
 - [ ] **Antes de actualizar WordPress**: respaldo completo + base de datos, y después revisar Diagnóstico.
+- [ ] **Cada mes**: actualizar WordPress, el plugin Two Factor y el tema Kadence (el servidor no se actualiza solo porque pide FTP; ver [instalación y actualización](documentacion/03-instalacion-y-actualizacion.md)). Después, revisar Diagnóstico.
+- [ ] **Una vez**: probar que un respaldo se puede restaurar en el [ambiente local](documentacion/07-ambiente-local.md). Un respaldo que nunca se probó no es garantía.
 
 ## 6. Reglas para quien siga desarrollando
 

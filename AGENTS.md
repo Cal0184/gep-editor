@@ -7,7 +7,7 @@ Lee esto antes de proponer o hacer cambios en este repositorio.
 - Sitio del Laboratorio GEP (Universidad de Chile): https://gep.uchile.cl/gep/
 - `sitio-publico/`: sitio PHP propio que **solo lee** contenido de WordPress. Se sirve en `/gep/`.
 - `motor/`: archivos propios dentro de WordPress, instalado en `/gep/motor/`. El núcleo de WordPress no está en el repositorio.
-- Plugin principal: `motor/wp-content/plugins/gep-editor-demo/` (GEP Editor 10.0.0, archivo `gep-editor-demo.php`, constante `GEP_EDITOR_VERSION`).
+- Plugin principal: `motor/wp-content/plugins/gep-editor-demo/` (GEP Editor 10.0.2, archivo `gep-editor-demo.php`, constante `GEP_EDITOR_VERSION`).
 - Seguridad: `motor/wp-content/mu-plugins/gep-acceso.php` + `gep-acceso/`, `motor/gep-config-migracion.php`.
 - Manual técnico completo: `documentacion/02-manual-tecnico.md`. Léelo antes de cambios grandes.
 - Quienes usan el editor no son técnicos. Textos de la interfaz y documentación en **español de Chile**, claros y cortos.

@@ -1,6 +1,6 @@
 <?php
 /**
- * GEP Editor 10.0.0 · Acceso al sitio público (interruptor «Sitio privado»).
+ * GEP Editor 10.0.0 (10.0.2) · Acceso al sitio público (interruptor «Sitio privado»).
  *
  * Contenido GEP → Acceso al sitio (solo administradores):
  *   - Encendido: el navegador pide usuario y clave antes de mostrar
@@ -24,6 +24,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 const GEP_PRIVADO_OPCION = 'gep_sitio_privado';
+if ( ! defined( 'GEP_PRIVADO_MAX_FALLOS' ) ) {
+    define( 'GEP_PRIVADO_MAX_FALLOS', 30 ); // v10.0.2: claves equivocadas antes de la pausa.
+}
+if ( ! defined( 'GEP_PRIVADO_MINUTOS_PAUSA' ) ) {
+    define( 'GEP_PRIVADO_MINUTOS_PAUSA', 10 );
+}
 
 function gep_privado_ajustes() {
     $a = get_option( GEP_PRIVADO_OPCION, array() );
@@ -75,16 +81,57 @@ function gep_privado_credenciales() {
     return array( $u, $p );
 }
 
-function gep_privado_pedir_clave() {
+function gep_privado_pedir_clave( $en_pausa = false ) {
     nocache_headers();
     status_header( 401 );
+    if ( $en_pausa ) {
+        header( 'Retry-After: ' . ( GEP_PRIVADO_MINUTOS_PAUSA * 60 ) );
+    }
     header( 'WWW-Authenticate: Basic realm="Laboratorio GEP", charset="UTF-8"' );
     header( 'Content-Type: text/html; charset=utf-8' );
     header( 'X-Robots-Tag: noindex' );
     echo '<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>GEP · Acceso restringido</title></head>'
         . '<body style="font-family:system-ui,sans-serif;padding:24px;max-width:560px;margin:auto;color:#1d2b22"><h1 style="font-size:1.3rem;color:#1f5130">Acceso restringido</h1>'
-        . '<p>El sitio del Laboratorio GEP está en revisión y por ahora pide usuario y clave. Si necesitas acceso, escribe al equipo GEP.</p></body></html>';
+        . '<p>El sitio del Laboratorio GEP está en revisión y por ahora pide usuario y clave. Si necesitas acceso, escribe al equipo GEP.</p>'
+        . ( $en_pausa ? '<p>Hubo demasiados intentos con una clave equivocada. Espera ' . (int) GEP_PRIVADO_MINUTOS_PAUSA . ' minutos y vuelve a intentarlo.</p>' : '' )
+        . '</body></html>';
     exit;
+}
+
+/*
+ * v10.0.2 · Contador de claves equivocadas. Se guarda en una opción (no en
+ * caché) y se suma con una sola consulta, para que muchos intentos al mismo
+ * tiempo cuenten todos. Se reinicia solo cuando pasan GEP_PRIVADO_MINUTOS_PAUSA
+ * minutos desde el primer fallo, y al guardar la pantalla Acceso al sitio.
+ */
+function gep_privado_fallos_actuales() {
+    $d = get_option( 'gep_privado_fallos', array() );
+    if ( ! is_array( $d ) || empty( $d['desde'] ) || time() - (int) $d['desde'] > GEP_PRIVADO_MINUTOS_PAUSA * MINUTE_IN_SECONDS ) {
+        return 0;
+    }
+    global $wpdb;
+    return (int) $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", 'gep_privado_fallos_n' ) );
+}
+
+function gep_privado_sumar_fallo() {
+    global $wpdb;
+    $d = get_option( 'gep_privado_fallos', array() );
+    if ( ! is_array( $d ) || empty( $d['desde'] ) || time() - (int) $d['desde'] > GEP_PRIVADO_MINUTOS_PAUSA * MINUTE_IN_SECONDS ) {
+        update_option( 'gep_privado_fallos', array( 'desde' => time() ), false );
+        update_option( 'gep_privado_fallos_n', 0, false );
+    }
+    if ( false === get_option( 'gep_privado_fallos_n', false ) ) {
+        add_option( 'gep_privado_fallos_n', 0, '', 'no' );
+    }
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->options} SET option_value = option_value + 1 WHERE option_name = %s", 'gep_privado_fallos_n' ) );
+    wp_cache_delete( 'gep_privado_fallos_n', 'options' );
+    wp_cache_delete( 'notoptions', 'options' );
+    return (int) $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", 'gep_privado_fallos_n' ) );
+}
+
+function gep_privado_reiniciar_fallos() {
+    delete_option( 'gep_privado_fallos' );
+    delete_option( 'gep_privado_fallos_n' );
 }
 
 /* Control en cada página del sitio público (se ejecuta al cargar WordPress). */
@@ -94,12 +141,22 @@ add_action( 'wp_loaded', function () {
     }
     $a = gep_privado_ajustes();
     list( $u, $p ) = gep_privado_credenciales();
+    // v10.0.2: tras muchos intentos fallidos seguidos (de cualquier origen,
+    // porque detrás del proxy todas las visitas llegan con la misma IP) se deja
+    // de revisar la clave por unos minutos. Frena a quien prueba claves al azar.
+    if ( '' !== $u && gep_privado_fallos_actuales() >= GEP_PRIVADO_MAX_FALLOS ) {
+        gep_privado_pedir_clave( true );
+    }
     if ( '' !== $u && hash_equals( (string) $a['usuario'], $u ) && wp_check_password( $p, (string) $a['hash'] ) ) {
         header( 'Cache-Control: private, no-store' );
         return;
     }
     if ( '' !== $u ) {
-        sleep( 1 ); // Frena a quien prueba claves al azar.
+        $fallos = gep_privado_sumar_fallo();
+        if ( GEP_PRIVADO_MAX_FALLOS === $fallos && function_exists( 'gep_registro' ) ) {
+            gep_registro( 'acceso', sprintf( 'Acceso al sitio: %d claves equivocadas seguidas. Se pausó la revisión de claves por %d minutos.', GEP_PRIVADO_MAX_FALLOS, GEP_PRIVADO_MINUTOS_PAUSA ) );
+        }
+        sleep( 1 );
     }
     gep_privado_pedir_clave();
 }, 1 );
@@ -139,6 +196,7 @@ add_action( 'admin_post_gep_privado_guardar', function () {
             $activo = false;
         }
         $a['activo'] = $activo;
+        gep_privado_reiniciar_fallos(); // Una clave nueva o un cambio levanta la pausa.
         $a['cambio'] = time();
         $a['por']    = get_current_user_id();
         update_option( GEP_PRIVADO_OPCION, $a, false );
@@ -198,7 +256,7 @@ function gep_privado_pantalla() {
                 <br><span class="description">Se guarda cifrada: nadie puede verla después, ni siquiera un administrador. Si la olvidas, escribe una nueva. Usa una clave distinta a la de tu cuenta de WordPress.</span></p>
             <p><button type="submit" class="button button-primary">Guardar</button></p>
         </form>
-        <p class="description">Las fotos y documentos sueltos siguen accesibles si alguien tiene su dirección exacta. El editor (/gep/motor/) usa su propio inicio de sesión.</p>
+        <div class="notice notice-info inline"><p><strong>Qué no protege:</strong> las fotos, videos y PDF de la Mediateca se pueden abrir sin clave si alguien tiene su dirección exacta (el servidor los entrega directo). No subas a la Mediateca documentos que no puedan ser públicos. El editor (/gep/motor/) usa su propio inicio de sesión.</p></div>
     </div>
     <style>
         .gep-privado{max-width:720px}

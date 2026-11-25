@@ -17,7 +17,7 @@ No se necesita: cambiar la configuración de nginx, `.htaccess`, cron del sistem
 
 | Componente | Versión | Ubicación | Depende de |
 | --- | --- | --- | --- |
-| GEP Editor | 10.0.0 | `motor/wp-content/plugins/gep-editor-demo/` | WordPress |
+| GEP Editor | 10.0.2 | `motor/wp-content/plugins/gep-editor-demo/` | WordPress |
 | gep-acceso | 10.0.0 | `motor/wp-content/mu-plugins/` | WordPress; plugin Two Factor para el segundo factor |
 | gep-seguridad | 1.0.0 | `motor/wp-content/mu-plugins/gep-seguridad.php` | WordPress |
 | Configuración GEP | 10.0.0 | `motor/gep-config-migracion.php` | Cargada desde `wp-config.php` |

@@ -1,5 +1,11 @@
 # GEP Editor — CHANGELOG
 
+## 10.0.2 · Ajustes de la revisión externa (25-11-2026)
+Sin cambios de datos ni de pantallas del editor; se instala igual que la 10.0.1 (carpeta completa del plugin).
+- **Guardado** (`gep-editor-demo.php`, `gep_demo_handle_admin_save`): el tipo de página (Inicio, Servicios, Publicaciones…) se deduce de la página misma. El campo oculto `gep_editor_context` del formulario solo decide si la página no se reconoce, como antes. Si no coinciden, se guarda según la página y queda una nota en Diagnóstico → Registro técnico. Evita que un formulario equivocado escriba campos de otra pestaña.
+- **Acceso al sitio** (`includes/sitio-privado.php`): tras 30 claves equivocadas (contadas aunque lleguen al mismo tiempo), la clave deja de revisarse por 10 minutos (respuesta 401 con aviso y `Retry-After`) y queda anotado en el Registro técnico. Guardar la pantalla Acceso al sitio levanta la pausa. Ajustable con `GEP_PRIVADO_MAX_FALLOS` y `GEP_PRIVADO_MINUTOS_PAUSA`. El aviso de que fotos y PDF de la Mediateca no quedan protegidos ahora es un recuadro visible.
+- Documentación del repositorio alineada a 10.0.2, nueva guía `documentacion/07-ambiente-local.md` y revisión automática de sintaxis PHP en GitHub (`.github/workflows/php-lint.yml`).
+
 ## 10.0.1 · Botón «Modo oscuro» visible en la Ayuda (24-11-2026)
 - En la Ayuda, en modo claro, el botón «Modo oscuro» quedaba blanco sobre fondo claro (funcionaba pero no se veía). Ahora usa el mismo estilo que «Abrir historial». Solo cambia `assets/dark.css`; el modo oscuro queda igual.
 

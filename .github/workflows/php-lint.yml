@@ -1,0 +1,30 @@
+# Revisión automática: comprueba que ningún archivo PHP tenga errores de sintaxis.
+# Corre en cada cambio subido a GitHub y en cada pull request. No toca el servidor.
+name: Revisión de sintaxis PHP
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  php-lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.1', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: php -l en todos los archivos
+        run: |
+          fallas=0
+          while IFS= read -r -d '' f; do
+            php -l "$f" > /dev/null || fallas=1
+          done < <(find . -name '*.php' -not -path './.git/*' -print0)
+          exit $fallas

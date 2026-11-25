@@ -2,7 +2,7 @@
 /**
  * Plugin Name: GEP Editor
  * Description: Editor guiado de contenido para GEP. Incluye Inicio, Quiénes somos, Contacto, Docencia, Proyectos, Servicios, Publicaciones, Comunicaciones y Noticias, con historial, preview, validación, filtros, orden drag & drop, duplicado y edición guiada.
- * Version: 10.0.1
+ * Version: 10.0.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'GEP_EDITOR_VERSION' ) ) {
-    define( 'GEP_EDITOR_VERSION', '10.0.1' );
+    define( 'GEP_EDITOR_VERSION', '10.0.2' );
 }
 if ( ! defined( 'GEP_EDITOR_PLUGIN_FILE' ) ) {
     define( 'GEP_EDITOR_PLUGIN_FILE', __FILE__ );
@@ -3467,21 +3467,50 @@ function gep_demo_handle_admin_save() {
         gep_demo_history_ensure_baseline( $post_id, $history_context );
         $history_before = gep_demo_history_capture_snapshot( $post_id );
     }
-    if ( gep_demo_is_home_page( $post_id, $navigation ) || 'home' === $context ) {
+    // v10.0.2: el tipo de página se deduce de la página misma. El campo oculto
+    // del formulario solo decide cuando la página no se reconoce (como antes),
+    // así un formulario con un contexto equivocado no escribe campos ajenos.
+    $detected = '';
+    if ( gep_demo_is_home_page( $post_id, $navigation ) ) {
+        $detected = 'home';
+    } elseif ( gep_demo_is_services_page( $post_id, $navigation ) ) {
+        $detected = 'services';
+    } elseif ( gep_demo_is_hub_page( $post_id, 'communications', $navigation ) ) {
+        $detected = 'communications';
+    } elseif ( gep_demo_is_hub_page( $post_id, 'news', $navigation ) ) {
+        $detected = 'news';
+    } elseif ( gep_demo_is_publications_page( $post_id, $navigation ) ) {
+        $detected = 'publications';
+    } elseif ( gep_demo_is_projects_page( $post_id, $navigation ) ) {
+        $detected = 'projects';
+    } elseif ( gep_demo_is_docencia_page( $post_id, $navigation ) ) {
+        $detected = 'docencia';
+    } elseif ( gep_demo_is_contact_page( $post_id, $navigation ) ) {
+        $detected = 'contact';
+    }
+    if ( '' !== $detected && $detected !== $context ) {
+        if ( '' !== $context && function_exists( 'gep_registro' ) ) {
+            gep_registro( 'guardado', sprintf( 'El formulario decía «%s» pero la página es «%s»: se guardó como «%s».', $context, $detected, $detected ), get_the_title( $post_id ) );
+        }
+        $context = $detected;
+    }
+    $save_as = '' !== $detected ? $detected : $context;
+
+    if ( 'home' === $save_as ) {
         gep_demo_save_home_fields( $post_id, $_POST );
-    } elseif ( gep_demo_is_services_page( $post_id, $navigation ) || 'services' === $context ) {
+    } elseif ( 'services' === $save_as ) {
         gep_demo_save_services_fields( $post_id, $_POST );
-    } elseif ( gep_demo_is_hub_page( $post_id, 'communications', $navigation ) || 'communications' === $context ) {
+    } elseif ( 'communications' === $save_as ) {
         gep_demo_save_hub_fields( $post_id, $_POST, 'communications' );
-    } elseif ( gep_demo_is_hub_page( $post_id, 'news', $navigation ) || 'news' === $context ) {
+    } elseif ( 'news' === $save_as ) {
         gep_demo_save_hub_fields( $post_id, $_POST, 'news' );
-    } elseif ( gep_demo_is_publications_page( $post_id, $navigation ) || 'publications' === $context ) {
+    } elseif ( 'publications' === $save_as ) {
         gep_demo_save_publications_fields( $post_id, $_POST );
-    } elseif ( gep_demo_is_projects_page( $post_id, $navigation ) || 'projects' === $context ) {
+    } elseif ( 'projects' === $save_as ) {
         gep_demo_save_projects_fields( $post_id, $_POST );
-    } elseif ( gep_demo_is_docencia_page( $post_id, $navigation ) || 'docencia' === $context ) {
+    } elseif ( 'docencia' === $save_as ) {
         gep_demo_save_docencia_fields( $post_id, $_POST );
-    } elseif ( gep_demo_is_contact_page( $post_id, $navigation ) || 'contact' === $context ) {
+    } elseif ( 'contact' === $save_as ) {
         gep_demo_save_contact_fields( $post_id, $_POST );
     } else {
         gep_demo_save_content_fields( $post_id, $_POST );
